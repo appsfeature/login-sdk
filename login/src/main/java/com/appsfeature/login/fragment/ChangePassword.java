@@ -86,8 +86,9 @@ public class ChangePassword extends BaseFragment {
 
     private void executeTask() {
         String newPassword = etNewPassword.getText().toString();
+        String userId = "";
         LoginNetwork.getInstance(getContext())
-                .changePassword(newPassword, new LoginListener<Void>() {
+                .changePassword(userId, newPassword, new LoginListener<Boolean>() {
                     @Override
                     public void onPreExecute() {
                         btnAction.startProgress();
@@ -95,7 +96,7 @@ public class ChangePassword extends BaseFragment {
                     }
 
                     @Override
-                    public void onSuccess(Void response) {
+                    public void onSuccess(Boolean response) {
                         btnAction.revertSuccessProgress(new ProgressButton.Listener() {
                             @Override
                             public void onAnimationCompleted() {
@@ -105,9 +106,8 @@ public class ChangePassword extends BaseFragment {
                     }
 
                     @Override
-                    public void onError(String response) {
+                    public void onError(Exception e) {
                         btnAction.revertProgress();
-
                     }
                 });
 

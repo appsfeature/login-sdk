@@ -96,7 +96,7 @@ public class ForgotPassword extends BaseFragment {
         String otp = etPinCode.getText().toString();
 
         LoginNetwork.getInstance(getContext())
-                .forgotPassword(username, otp, isOtpSend, new LoginListener<Void>() {
+                .forgotPassword(username, otp, isOtpSend, new LoginListener<Boolean>() {
                     @Override
                     public void onPreExecute() {
                         btnAction.startProgress();
@@ -104,7 +104,7 @@ public class ForgotPassword extends BaseFragment {
                     }
 
                     @Override
-                    public void onSuccess(Void response) {
+                    public void onSuccess(Boolean response) {
                         if(!isOtpSend) {
                             etUsername.setVisibility(View.GONE);
                             etPinCode.setVisibility(View.VISIBLE);
@@ -124,9 +124,8 @@ public class ForgotPassword extends BaseFragment {
                     }
 
                     @Override
-                    public void onError(String response) {
+                    public void onError(Exception e) {
                         btnAction.revertProgress();
-
                     }
                 });
 

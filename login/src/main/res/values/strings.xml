@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">login</string>
 
-    <!--Login-->
+    <!--Profile-->
     <string name="login_message">Already have an account? </string>
     <string name="signup_message">Don\'t have an account? </string>
     <string name="signup">Sign up</string>

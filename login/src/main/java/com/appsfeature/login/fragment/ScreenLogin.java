@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.appsfeature.login.R;
+import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.network.LoginListener;
 import com.appsfeature.login.network.LoginNetwork;
 import com.appsfeature.login.util.FieldValidation;
@@ -89,7 +90,7 @@ public class ScreenLogin extends BaseFragment {
             }
         });
 
-        btnAction.setOnEditorActionListener(etPassword, "Login");
+        btnAction.setOnEditorActionListener(etPassword, "Profile");
 
     }
 
@@ -97,8 +98,9 @@ public class ScreenLogin extends BaseFragment {
     private void executeTask() {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
+
         LoginNetwork.getInstance(getContext())
-                .loginAdmin(username, password, new LoginListener<Void>() {
+                .loginUser(username, password, new LoginListener<Profile>() {
                     @Override
                     public void onPreExecute() {
                         btnAction.startProgress();
@@ -106,7 +108,7 @@ public class ScreenLogin extends BaseFragment {
                     }
 
                     @Override
-                    public void onSuccess(Void response) {
+                    public void onSuccess(Profile response) {
                         btnAction.revertSuccessProgress(new ProgressButton.Listener() {
                             @Override
                             public void onAnimationCompleted() {
@@ -116,7 +118,7 @@ public class ScreenLogin extends BaseFragment {
                     }
 
                     @Override
-                    public void onError(String response) {
+                    public void onError(Exception e) {
                         btnAction.revertProgress();
 
                     }

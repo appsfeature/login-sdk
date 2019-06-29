@@ -6,6 +6,7 @@ import com.appsfeature.login.fragment.ChangePassword;
 import com.appsfeature.login.fragment.ForgotPassword;
 import com.appsfeature.login.fragment.ScreenLogin;
 import com.appsfeature.login.fragment.ScreenSignUp;
+import com.appsfeature.login.util.LoginPrefUtil;
 
 
 /**
@@ -24,13 +25,17 @@ public class LoginActivity extends BaseActivity {
 
     private void startMainActivity() {
         finish();
-        LoginSDK.getInstance().listener.onSuccess(LoginSDK.getLoginCredentials());
+        if (LoginSDK.getInstance().listener != null) {
+            LoginSDK.getInstance().listener.onSuccess(LoginSDK.getLoginCredentials());
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-//        LoginSDK.getInstance().listener.onSuccess(LoginSDK.getLoginCredentials());
+        if (LoginSDK.getInstance().listener != null) {
+            LoginSDK.getInstance().listener.onFailure(new Exception("Login failed."));
+        }
     }
 
     public void addLoginScreen() {
@@ -75,7 +80,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void addPasswordChangeScreen() {
-                addPasswordChange(LoginSDK.getUserId(getApplicationContext()));
+                addPasswordChange(LoginPrefUtil.getUserId());
             }
         }),R.id.login_container, "forgotPassword");
     }

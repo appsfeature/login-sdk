@@ -1,12 +1,41 @@
 package com.appsfeature.login.model;
 
-public class Login {
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+public class Profile {
+
+    @SerializedName("userId")
+    @Expose
     private String userId;
+
+    @SerializedName("name")
+    @Expose
     private String name;
-    private String mobile;
-    private String email;
+
+    @SerializedName("username")
+    @Expose
+    private String username;
+
+    @SerializedName("status")
+    @Expose
+    private String status;
+
+    @SerializedName("validity")
+    @Expose
+    private String validity;
+
+    @SerializedName("image")
+    @Expose
     private String image;
+
+    @SerializedName("mobile")
+    @Expose
+    private String mobile;
+
+    @SerializedName("email")
+    @Expose
+    private String email;
 
 
     public String getUserId() {

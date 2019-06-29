@@ -3,8 +3,8 @@ package com.appsfeature.login.util;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.transition.Slide;
 import android.view.View;
 import android.view.WindowManager;
@@ -13,7 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
+import com.appsfeature.login.model.Profile;
 
 public class LoginUtil {
     private static final long ANIM_DURATION_MEDIUM = 500;
@@ -51,6 +53,27 @@ public class LoginUtil {
                 act.finish();
             }
         });
+    }
+
+    public static void saveUserProfileData(Profile loginUser) {
+        if (loginUser != null) {
+            LoginPrefUtil.setProfile(loginUser);
+        }
+    }
+
+    public static Profile getUserProfileData() {
+        Profile profile = new Profile();
+        profile.setUserId(LoginSDK.getInstance().getUserId());
+        profile.setName(LoginSDK.getInstance().getUserName());
+        profile.setMobile(LoginSDK.getInstance().getUserMobile());
+        profile.setEmail(LoginSDK.getInstance().getEmailId());
+        profile.setImage(LoginSDK.getInstance().getUserImage());
+        return profile;
+    }
+
+    public static String getDeviceId(Context context) {
+        return Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ANDROID_ID);
     }
 
 }

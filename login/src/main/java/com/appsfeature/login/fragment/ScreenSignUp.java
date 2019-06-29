@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.appsfeature.login.R;
+import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.network.LoginListener;
 import com.appsfeature.login.network.LoginNetwork;
 import com.appsfeature.login.util.FieldValidation;
@@ -102,7 +103,7 @@ public class ScreenSignUp extends BaseFragment {
         String email = etEmail.getText().toString();
         String password = etPassword.getText().toString();
         LoginNetwork.getInstance(getContext())
-                .signUp(name, email, password, new LoginListener<Void>() {
+                .signUp(name, email, password, new LoginListener<Profile>() {
                     @Override
                     public void onPreExecute() {
                         btnAction.startProgress();
@@ -110,7 +111,7 @@ public class ScreenSignUp extends BaseFragment {
                     }
 
                     @Override
-                    public void onSuccess(Void response) {
+                    public void onSuccess(Profile response) {
                         btnAction.revertSuccessProgress(new ProgressButton.Listener() {
                             @Override
                             public void onAnimationCompleted() {
@@ -120,7 +121,7 @@ public class ScreenSignUp extends BaseFragment {
                     }
 
                     @Override
-                    public void onError(String response) {
+                    public void onError(Exception e) {
                         btnAction.revertProgress();
 
                     }
