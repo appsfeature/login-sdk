@@ -2,16 +2,22 @@ package com.appsfeature.loginsdk;
 
 import android.app.Application;
 
-import com.appsfeature.login.network.RetrofitGenerator;
+import com.appsfeature.login.LoginSDK;
+import com.appsfeature.login.interfaces.LoginCallback;
+import com.appsfeature.login.model.ApiRequest;
+import com.appsfeature.login.model.Profile;
+import com.appsfeature.login.network.LoginParams;
+import com.appsfeature.login.network.LoginType;
+import com.appsfeature.login.network.RequestType;
 
-import retrofit2.Retrofit;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AppApplication extends Application {
 
-
-    private static final String HOST_URL = "http://www.appsfeature.com/MrBizz/index.php/";
-    private Retrofit retrofit;
+    private static final String HOST_URL = "http://allinoneglobalmarket.com/mobile_app/";
     private static AppApplication instance;
+    private LoginSDK loginSdk;
 
     public static AppApplication getInstance() {
         return instance;
@@ -21,10 +27,61 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        retrofit = RetrofitGenerator.getClient(HOST_URL, SupportUtil.getSecurityCode(this), true);
     }
 
-    public Retrofit getRetrofit() {
-        return retrofit;
+    public LoginSDK getLoginSdk() {
+        if(loginSdk == null) {
+            loginSdk = LoginSDK.getInstance(this, HOST_URL, BuildConfig.DEBUG)
+                    .setApiRequests(getApiRequestKeys())
+                    .setFacebookLogin(false)
+                    .setGoogleLogin(true)
+                    .setEmailLogin(true)
+                    .setEnableForgetPass(false)
+                    .setEnableSignup(false)
+                    .addLoginListener(new LoginCallback.Listener() {
+                        @Override
+                        public void onSuccess(Profile response) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+
+                        }
+                    });
+        }
+        return loginSdk;
+    }
+
+    public static HashMap<Integer, ApiRequest> getApiRequestKeys() {
+        HashMap<Integer, ApiRequest> hashMap = new HashMap<>();
+        Map<String, String> map;
+        map = new HashMap<>();
+        map.put(LoginParams.UserName, "email");
+        map.put(LoginParams.Password, "password");
+        hashMap.put(LoginType.LOGIN, new ApiRequest("login_ap", RequestType.POST_FORM, map));
+
+        map = new HashMap<>();
+        map.put(LoginParams.Name, "name");
+        map.put(LoginParams.EmailOrMobile, "emailOrMobile");
+        map.put(LoginParams.UserName, "username");
+        map.put(LoginParams.Password, "password");
+        hashMap.put(LoginType.SIGNUP, new ApiRequest("signup", RequestType.POST, map));
+
+        map = new HashMap<>();
+        map.put(LoginParams.UserName, "username");
+        hashMap.put(LoginType.FORGET_PASSWORD, new ApiRequest("forgetPassword", RequestType.POST, map));
+
+        map = new HashMap<>();
+        map.put(LoginParams.UserName, "username");
+        map.put(LoginParams.Otp, "otp");
+        hashMap.put(LoginType.VALIDATE_OTP, new ApiRequest("validateOtp", RequestType.POST, map));
+
+        map = new HashMap<>();
+        map.put(LoginParams.UserName, "username");
+        map.put(LoginParams.Password, "password");
+        hashMap.put(LoginType.CHANGE_PASSWORD, new ApiRequest("changePassword", RequestType.POST, map));
+
+        return hashMap;
     }
 }

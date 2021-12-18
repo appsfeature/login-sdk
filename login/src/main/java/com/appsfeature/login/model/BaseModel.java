@@ -1,5 +1,6 @@
 package com.appsfeature.login.model;
 
+import com.appsfeature.login.LoginSDK;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -21,8 +22,8 @@ public class BaseModel {
     @Expose
     private Object data;
 
-    public Object getData() {
-        return data;
+    public String getData() {
+        return LoginSDK.getGson().toJson(data);
     }
 
     public void setData(Object data) {

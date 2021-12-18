@@ -1,34 +1,45 @@
 package com.appsfeature.login.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
+
+import android.transition.Fade;
 import android.transition.Slide;
+import android.util.Base64;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
 import com.appsfeature.login.model.Profile;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginUtil {
     private static final long ANIM_DURATION_MEDIUM = 500;
 
     public static void setSlideAnimation(Fragment fragment, int gravity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Slide slideTransition = new Slide(gravity);
-            slideTransition.setDuration(ANIM_DURATION_MEDIUM);
-//            ChangeBounds changeBoundsTransition = new ChangeBounds();
-//            changeBoundsTransition.setDuration(ANIM_DURATION_MEDIUM);
-            fragment.setEnterTransition(slideTransition);
-            fragment.setAllowEnterTransitionOverlap(true);
-            fragment.setAllowReturnTransitionOverlap(true);
+//            Fade slideTransition = new Fade();
+//            slideTransition.setDuration(ANIM_DURATION_MEDIUM);
+////            ChangeBounds changeBoundsTransition = new ChangeBounds();
+////            changeBoundsTransition.setDuration(ANIM_DURATION_MEDIUM);
+//            fragment.setEnterTransition(slideTransition);
+//            fragment.setAllowEnterTransitionOverlap(true);
+//            fragment.setAllowReturnTransitionOverlap(true);
 //            fragment.setSharedElementEnterTransition(changeBoundsTransition);
         }
     }
@@ -55,19 +66,19 @@ public class LoginUtil {
         });
     }
 
-    public static void saveUserProfileData(Profile loginUser) {
+    public static void saveUserProfileData(Context context, Profile loginUser) {
         if (loginUser != null) {
-            LoginPrefUtil.setProfile(loginUser);
+            LoginPrefUtil.setProfile(context, loginUser);
         }
     }
 
-    public static Profile getUserProfileData() {
+    public static Profile getUserProfileData(Context context) {
         Profile profile = new Profile();
-        profile.setUserId(LoginSDK.getInstance().getUserId());
-        profile.setName(LoginSDK.getInstance().getUserName());
-        profile.setMobile(LoginSDK.getInstance().getUserMobile());
-        profile.setEmail(LoginSDK.getInstance().getEmailId());
-        profile.setImage(LoginSDK.getInstance().getUserImage());
+        profile.setUserId(LoginSDK.getInstance().getUserId(context));
+        profile.setName(LoginSDK.getInstance().getUserName(context));
+        profile.setMobile(LoginSDK.getInstance().getUserMobile(context));
+        profile.setEmail(LoginSDK.getInstance().getEmailId(context));
+        profile.setImage(LoginSDK.getInstance().getUserImage(context));
         return profile;
     }
 
@@ -76,4 +87,25 @@ public class LoginUtil {
                 Settings.Secure.ANDROID_ID);
     }
 
+    public static String getSecurityCode(Context ctx) {
+        String keyHash = null;
+        try {
+            @SuppressLint("PackageManagerGetSignatures")
+            PackageInfo info = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                keyHash = Base64.encodeToString(md.digest(), Base64.NO_WRAP);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return keyHash;
+    }
+
+    public static void showToast(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
 }

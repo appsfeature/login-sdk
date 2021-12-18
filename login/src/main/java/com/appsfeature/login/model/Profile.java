@@ -1,42 +1,32 @@
 package com.appsfeature.login.model;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Profile {
 
-    @SerializedName("userId")
     @Expose
+    @SerializedName(value="userId", alternate={"user_id"})
     private String userId;
 
     @SerializedName("name")
     @Expose
     private String name;
 
-    @SerializedName("username")
     @Expose
-    private String username;
-
-    @SerializedName("status")
-    @Expose
-    private String status;
-
-    @SerializedName("validity")
-    @Expose
-    private String validity;
-
-    @SerializedName("image")
-    @Expose
+    @SerializedName(value="image", alternate={"user_profile"})
     private String image;
 
-    @SerializedName("mobile")
     @Expose
+    @SerializedName(value="mobile", alternate={"mobile_no"})
     private String mobile;
 
-    @SerializedName("email")
     @Expose
+    @SerializedName(value="email", alternate={"email_id"})
     private String email;
 
+    private String jsonData;
 
     public String getUserId() {
         return userId;
@@ -76,5 +66,17 @@ public class Profile {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getJsonData() {
+        return jsonData;
+    }
+
+    public void setJsonData(String jsonData) {
+        this.jsonData = jsonData;
+    }
+
+    public <T> T getJsonModel(Class<T> classOfT) {
+        return new Gson().fromJson(jsonData, classOfT);
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/login_bg_main"
@@ -37,7 +37,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/cv_patient"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -87,7 +87,7 @@
 
                             </LinearLayout>
 
-                        </android.support.v7.widget.CardView>
+                        </androidx.cardview.widget.CardView>
                     </LinearLayout>
 
                     <LinearLayout
@@ -153,12 +153,13 @@
                         android:textSize="@dimen/text_size_medium" />
 
                     <TextView
+                        android:id="@+id/tag_signup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
                         android:background="@drawable/login_bg_underline"
                         android:gravity="center"
-                        android:text="@string/signup"
+                        android:text="Sign up"
                         android:textColor="@color/colorPrimaryDark"
                         android:textSize="@dimen/text_size_medium" />
 
@@ -171,4 +172,4 @@
 
     </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

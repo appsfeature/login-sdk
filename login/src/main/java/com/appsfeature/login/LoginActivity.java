@@ -10,9 +10,8 @@ import com.appsfeature.login.util.LoginPrefUtil;
 
 
 /**
- * Created by Admin on 5/22/2017.
+ * @author Abhijit Rao on 5/22/2017.
  */
-
 public class LoginActivity extends BaseActivity {
 
 
@@ -20,22 +19,22 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
-        addLoginScreen();
+        if(LoginSDK.getInstance().isEnableLogin()) {
+            addLoginScreen();
+        }else {
+            addSignup();
+        }
     }
 
-    private void startMainActivity() {
+    private void onLoginCompletedSuccessful() {
         finish();
-        if (LoginSDK.getInstance().listener != null) {
-            LoginSDK.getInstance().listener.onSuccess(LoginSDK.getLoginCredentials());
-        }
+        LoginSDK.getInstance().dispatchLoginListener(LoginSDK.getLoginCredentials(), null);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if (LoginSDK.getInstance().listener != null) {
-            LoginSDK.getInstance().listener.onFailure(new Exception("Login failed."));
-        }
+        LoginSDK.getInstance().dispatchLoginListener(LoginSDK.getLoginCredentials(), new Exception("Login failed."));
     }
 
     public void addLoginScreen() {
@@ -52,7 +51,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onLoginSuccess() {
-                startMainActivity();
+                onLoginCompletedSuccessful();
             }
         }),R.id.login_container, "login");
     }
@@ -66,7 +65,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onLoginSuccess() {
-                startMainActivity();
+                onLoginCompletedSuccessful();
             }
         }),R.id.login_container, "signup");
     }
@@ -80,7 +79,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void addPasswordChangeScreen() {
-                addPasswordChange(LoginPrefUtil.getUserId());
+                addPasswordChange(LoginPrefUtil.getUserId(LoginActivity.this));
             }
         }),R.id.login_container, "forgotPassword");
     }

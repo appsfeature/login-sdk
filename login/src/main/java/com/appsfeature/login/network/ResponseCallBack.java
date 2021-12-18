@@ -1,13 +1,11 @@
 package com.appsfeature.login.network;
 
 
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
-import com.appsfeature.login.LoginSDK;
-import com.appsfeature.login.model.BaseModel;
+import androidx.annotation.NonNull;
 
-import org.json.JSONException;
+import com.appsfeature.login.model.BaseModel;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -15,24 +13,20 @@ import retrofit2.Response;
 
 
 /**
- * Created by Amit on 4/10/2018.
+ * @author Abhijit Rao on 5/22/2017.
  */
-
 public class ResponseCallBack implements Callback<BaseModel> {
 
     public interface OnNetworkCall {
-        void onComplete(boolean status, String data);
+        void onComplete(boolean status, BaseModel response);
 
         void onError(Exception e);
     }
 
-    private OnNetworkCall onNetworkCall;
+    private final OnNetworkCall onNetworkCall;
 
-    ResponseCallBack(OnNetworkCall onNetworkCall) {
+    public ResponseCallBack(OnNetworkCall onNetworkCall) {
         this.onNetworkCall = onNetworkCall;
-    }
-
-    private ResponseCallBack() {
     }
 
     @Override
@@ -47,12 +41,7 @@ public class ResponseCallBack implements Callback<BaseModel> {
                     BaseModel baseModel = response.body();
                     boolean status = !TextUtils.isEmpty(baseModel.getStatus())
                             && baseModel.getStatus().equals("success");
-                    String s = LoginSDK.getGson().toJson(baseModel.getData());
-                    if (!TextUtils.isEmpty(s)) {
-                        onNetworkCall.onComplete(status, status ? s : "");
-                    } else {
-                        invalidResponse(response);
-                    }
+                    onNetworkCall.onComplete(status, baseModel);
                 } else {
                     invalidResponse(response);
                 }

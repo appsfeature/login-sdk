@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/login_bg_main"
@@ -37,7 +37,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                        <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                             android:id="@+id/cv_patient"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                                     android:orientation="vertical">
 
                                     <EditText
-                                        android:id="@+id/et_company_name"
+                                        android:id="@+id/et_name"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:background="@drawable/login_et_multi_row"
@@ -72,16 +72,17 @@
                                         android:padding="@dimen/vertical_margin" />
 
                                     <EditText
+                                        android:id="@+id/et_email_mobile"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:background="@drawable/login_et_multi_row"
-                                        android:hint="Mobile Number"
+                                        android:hint="Email / Mobile"
                                         android:layout_marginTop="@dimen/vertical_margin"
                                         android:inputType="textPersonName"
                                         android:padding="@dimen/vertical_margin" />
 
                                     <EditText
-                                        android:id="@+id/et_company_email"
+                                        android:id="@+id/et_username"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/vertical_margin"
@@ -91,7 +92,7 @@
                                         android:padding="@dimen/vertical_margin" />
 
                                     <EditText
-                                        android:id="@+id/et_company_password"
+                                        android:id="@+id/et_password"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/vertical_margin"
@@ -105,7 +106,7 @@
 
                             </LinearLayout>
 
-                        </android.support.v7.widget.CardView>
+                        </androidx.cardview.widget.CardView>
                     </LinearLayout>
 
                     <LinearLayout
@@ -185,6 +186,7 @@
                         android:textSize="@dimen/text_size_medium" />
 
                     <TextView
+                        android:id="@+id/tag_login"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -201,4 +203,4 @@
 
     </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+</androidx.core.widget.NestedScrollView>

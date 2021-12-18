@@ -2,7 +2,7 @@ package com.appsfeature.login.util;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -20,7 +20,7 @@ import com.appsfeature.login.R;
  * Created by chintan on 23-04-2017.
  */
 
-public class EditTextWithClear extends android.support.v7.widget.AppCompatEditText {
+public class EditTextWithClear extends androidx.appcompat.widget.AppCompatEditText {
 
     //The image we are going to use for the Clear button
 

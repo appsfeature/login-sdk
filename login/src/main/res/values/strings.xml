@@ -4,11 +4,8 @@
     <!--Profile-->
     <string name="login_message">Already have an account? </string>
     <string name="signup_message">Don\'t have an account? </string>
-    <string name="signup">Sign up</string>
-    <string name="login">Login</string>
     <string name="login_username">Username</string>
     <string name="login_password">Password</string>
-    <string name="login_admin">Admin Login</string>
     <string name="signup_message_user">This application will work only for registered organization. To obtain login credentials, Please contact your organization team member or contact us at info@appsfeature.com</string>
     <string name="login_message_detail_user">This feature provides an student convenience to complete assigned tasks and immediately report to teacher and receive notification for assigned task and other details etc.</string>
     <string name="login_message_detail_admin"><![CDATA[Monitor all necessary activities related to student & keep a check on students’s progress.\n\n]]></string>

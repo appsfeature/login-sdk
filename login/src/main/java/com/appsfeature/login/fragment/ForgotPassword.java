@@ -1,9 +1,6 @@
 package com.appsfeature.login.fragment;
 
-/**
- * Created by Admin on 5/22/2017.
- */
-
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,22 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
-import com.appsfeature.login.network.LoginListener;
+import com.appsfeature.login.interfaces.NetworkListener;
 import com.appsfeature.login.network.LoginNetwork;
 import com.appsfeature.login.util.FieldValidation;
 import com.appsfeature.login.util.LoginUtil;
 import com.progressbutton.ProgressButton;
 
-
+/**
+ * @author Abhijit Rao on 5/22/2017.
+ */
 public class ForgotPassword extends BaseFragment {
 
     private EditText etUsername, etPinCode;
-    private LinearLayout llSignup;
     private boolean isOtpSend;
     private Listener mListener;
     private ProgressButton btnAction;
+    private Activity activity;
 
     public interface Listener {
         void onAddSignupScreen();
@@ -44,10 +45,9 @@ public class ForgotPassword extends BaseFragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.login_forgot, container, false);
+        activity = getActivity();
         initToolBarTheme(getActivity(), v, "Forgot Password");
         InitUI(v);
         return v;
@@ -55,12 +55,15 @@ public class ForgotPassword extends BaseFragment {
 
     private void InitUI(View v) {
 
-        etUsername = (EditText) v.findViewById(R.id.et_employee_username);
-        etPinCode = (EditText) v.findViewById(R.id.et_employee_pin);
-        llSignup = (LinearLayout) v.findViewById(R.id.ll_signup);
+        etUsername = v.findViewById(R.id.et_employee_username);
+        etPinCode = v.findViewById(R.id.et_employee_pin);
+        LinearLayout llSignup = v.findViewById(R.id.ll_signup);
+
+        TextView tagSignup = v.findViewById(R.id.tag_signup);
+        tagSignup.setText(LoginSDK.getInstance().getTitleSignup());
 
         btnAction = ProgressButton.newInstance(getContext(), v)
-                .setText(getString(R.string.login))
+                .setText("Generate OTP")
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -71,7 +74,7 @@ public class ForgotPassword extends BaseFragment {
                         } else if (!FieldValidation.isEmpty(getContext(), etPinCode)) {
                             return;
                         }
-                        LoginUtil.hideKeybord(getActivity());
+                        LoginUtil.hideKeybord(activity);
                         executeTask();
                     }
                 });
@@ -95,8 +98,8 @@ public class ForgotPassword extends BaseFragment {
         String username = etUsername.getText().toString();
         String otp = etPinCode.getText().toString();
 
-        LoginNetwork.getInstance(getContext())
-                .forgotPassword(username, otp, isOtpSend, new LoginListener<Boolean>() {
+        LoginNetwork.getInstance()
+                .forgotPassword(username, otp, isOtpSend, new NetworkListener<Boolean>() {
                     @Override
                     public void onPreExecute() {
                         btnAction.startProgress();
@@ -126,6 +129,7 @@ public class ForgotPassword extends BaseFragment {
                     @Override
                     public void onError(Exception e) {
                         btnAction.revertProgress();
+                        LoginUtil.showToast(activity, e.getMessage());
                     }
                 });
 
