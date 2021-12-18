@@ -72,7 +72,7 @@ public class LoginNetwork {
         }
     }
 
-    public void authentication(String emailOrMobile, String otp, boolean isOtpSend, final NetworkListener<Boolean> callback) {
+    public void authentication(Context context, String emailOrMobile, String otp, boolean isOtpSend, final NetworkListener<Boolean> callback) {
         callback.onPreExecute();
         if(!isOtpSend) {
             ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.GENERATE_OTP);
@@ -106,6 +106,7 @@ public class LoginNetwork {
                 getData(apiRequest.getReqType(), apiRequest.getEndPoint(), params, new ResponseCallBack.OnNetworkCall() {
                     @Override
                     public void onComplete(boolean status, BaseModel data) {
+                        LoginPrefUtil.setAuthenticationComplete(context, true);
                         callback.onSuccess(status);
                     }
 
@@ -118,7 +119,7 @@ public class LoginNetwork {
         }
     }
 
-    public void forgotPassword(String emailOrMobile, String otp, boolean isOtpSend, final NetworkListener<Boolean> callback) {
+    public void forgotPassword(Context context, String emailOrMobile, String otp, boolean isOtpSend, final NetworkListener<Boolean> callback) {
         callback.onPreExecute();
         if(!isOtpSend) {
             ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.GENERATE_OTP);
@@ -148,6 +149,7 @@ public class LoginNetwork {
                 getData(apiRequest.getReqType(), apiRequest.getEndPoint(), params, new ResponseCallBack.OnNetworkCall() {
                     @Override
                     public void onComplete(boolean status, BaseModel data) {
+                        LoginPrefUtil.setAuthenticationComplete(context, true);
                         callback.onSuccess(status);
                     }
 

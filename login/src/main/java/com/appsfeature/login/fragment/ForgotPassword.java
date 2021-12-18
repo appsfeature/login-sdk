@@ -98,7 +98,7 @@ public class ForgotPassword extends BaseFragment {
         String otp = etOtp.getText().toString();
 
         LoginNetwork.getInstance()
-                .forgotPassword(emailOrMobile, otp, isOtpSend, new NetworkListener<Boolean>() {
+                .forgotPassword(activity, emailOrMobile, otp, isOtpSend, new NetworkListener<Boolean>() {
                     @Override
                     public void onPreExecute() {
                         btnAction.startProgress();

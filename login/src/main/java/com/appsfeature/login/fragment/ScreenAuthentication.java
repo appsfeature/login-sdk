@@ -110,7 +110,7 @@ public class ScreenAuthentication extends BaseFragment {
         String otp = etOtp.getText().toString();
 
         LoginNetwork.getInstance()
-                .authentication(emailOrMobile, otp, isOtpSend, new NetworkListener<Boolean>() {
+                .authentication(activity, emailOrMobile, otp, isOtpSend, new NetworkListener<Boolean>() {
                     @Override
                     public void onPreExecute() {
                         if(isOtpSend) {

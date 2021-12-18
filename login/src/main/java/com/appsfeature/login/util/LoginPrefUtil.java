@@ -48,7 +48,6 @@ public class LoginPrefUtil {
 
     /**
      * Set String value for a particular key.
-     *
      */
     public static void setProfile(Context context, Profile profile) {
         if (getDefaultSharedPref(context) != null && profile != null) {
@@ -106,7 +105,11 @@ public class LoginPrefUtil {
         return LoginPrefUtil.getBoolean(context, LoginConstant.SharedPref.IS_LOGIN_COMPLETE);
     }
 
-     public static String getEmailOrMobile(Context context) {
+    public static boolean isAuthenticationComplete(Context context) {
+        return LoginPrefUtil.getBoolean(context, LoginConstant.SharedPref.AUTHENTICATION_COMPLETE);
+    }
+
+    public static String getEmailOrMobile(Context context) {
         return LoginPrefUtil.getString(context, LoginConstant.SharedPref.EMAIL_OR_MOBILE);
     }
 
@@ -116,6 +119,10 @@ public class LoginPrefUtil {
 
     public static void setLoginComplete(Context context, boolean flag) {
         LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.IS_LOGIN_COMPLETE, flag);
+    }
+
+    public static void setAuthenticationComplete(Context context, boolean flag) {
+        LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.AUTHENTICATION_COMPLETE, flag);
     }
 
     public static void setEmailOrMobile(Context context, String emailOrMobile) {

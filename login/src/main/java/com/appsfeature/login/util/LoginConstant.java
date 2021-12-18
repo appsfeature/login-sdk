@@ -16,6 +16,7 @@ public class LoginConstant {
         String USER_EMAIL = "userEmail";
         String USER_EMAIL_VERIFIED = "userEmail_verified";
         String USER_PHONE = "userPhone";
+        String AUTHENTICATION_COMPLETE = "authentication_complete";
         String USER_ADDRESS = "userAddress";
         String USER_STATE = "userState";
         String USER_POSTAL_CODE = "userPostalCode";
