@@ -13,5 +13,6 @@
     <string name="signup_mobile_msg1" translatable="false">By proceeding further you agree to our</string>
     <string name="signup_mobile_msg2" translatable="false">App</string>
     <string name="signup_mobile_msg3" translatable="false">TERMS OF USE</string>
-
+    <string name="login_authentication_message">For your security we need to authenticate your request. We\'ve sent a One Time Password(OTP) to the your email/mobile</string>
+    <string name="login_authentication_retry">Did not receive? </string>
 </resources>

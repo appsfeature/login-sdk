@@ -17,7 +17,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,12 +50,12 @@ public class LoginNetwork {
         }
     }
 
-    public void changePassword(String username, String newPassword, final NetworkListener<Boolean> callback) {
+    public void changePassword(String userId, String newPassword, final NetworkListener<Boolean> callback) {
         callback.onPreExecute();
         ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.CHANGE_PASSWORD);
         if(apiRequest != null) {
             Map<String, String> params = new HashMap<>();
-            params.put(apiRequest.getParams().get(LoginParams.UserName), username);
+            params.put(apiRequest.getParams().get(LoginParams.UserId), userId);
             params.put(apiRequest.getParams().get(LoginParams.Password), newPassword);
 
             getData(apiRequest.getReqType(), apiRequest.getEndPoint(), params, new ResponseCallBack.OnNetworkCall() {
@@ -73,15 +72,59 @@ public class LoginNetwork {
         }
     }
 
-
-
-    public void forgotPassword(String username, String otp, boolean isOtpSend, final NetworkListener<Boolean> callback) {
+    public void authentication(String emailOrMobile, String otp, boolean isOtpSend, final NetworkListener<Boolean> callback) {
         callback.onPreExecute();
         if(!isOtpSend) {
-            ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.FORGET_PASSWORD);
+            ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.GENERATE_OTP);
             if(apiRequest != null) {
                 Map<String, String> params = new HashMap<>();
-                params.put(apiRequest.getParams().get(LoginParams.UserName), username);
+                params.put(apiRequest.getParams().get(LoginParams.EmailOrMobile), emailOrMobile);
+
+                getData(apiRequest.getReqType(), apiRequest.getEndPoint(), params, new ResponseCallBack.OnNetworkCall() {
+                    @Override
+                    public void onComplete(boolean status, BaseModel data) {
+                        callback.onSuccess(status);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+//                        if(LoginSDK.isDebugMode()){
+//                            callback.onSuccess(true);
+//                            return;
+//                        }
+                        callback.onError(e);
+                    }
+                });
+            }
+        }else{
+            ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.VALIDATE_OTP);
+            if(apiRequest != null) {
+                Map<String, String> params = new HashMap<>();
+                params.put(apiRequest.getParams().get(LoginParams.EmailOrMobile), emailOrMobile);
+                params.put(apiRequest.getParams().get(LoginParams.Otp), otp);
+
+                getData(apiRequest.getReqType(), apiRequest.getEndPoint(), params, new ResponseCallBack.OnNetworkCall() {
+                    @Override
+                    public void onComplete(boolean status, BaseModel data) {
+                        callback.onSuccess(status);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        callback.onError(e);
+                    }
+                });
+            }
+        }
+    }
+
+    public void forgotPassword(String emailOrMobile, String otp, boolean isOtpSend, final NetworkListener<Boolean> callback) {
+        callback.onPreExecute();
+        if(!isOtpSend) {
+            ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.GENERATE_OTP);
+            if(apiRequest != null) {
+                Map<String, String> params = new HashMap<>();
+                params.put(apiRequest.getParams().get(LoginParams.EmailOrMobile), emailOrMobile);
 
                 getData(apiRequest.getReqType(), apiRequest.getEndPoint(), params, new ResponseCallBack.OnNetworkCall() {
                     @Override
@@ -99,7 +142,7 @@ public class LoginNetwork {
             ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.VALIDATE_OTP);
             if(apiRequest != null) {
                 Map<String, String> params = new HashMap<>();
-                params.put(apiRequest.getParams().get(LoginParams.UserName), username);
+                params.put(apiRequest.getParams().get(LoginParams.EmailOrMobile), emailOrMobile);
                 params.put(apiRequest.getParams().get(LoginParams.Otp), otp);
 
                 getData(apiRequest.getReqType(), apiRequest.getEndPoint(), params, new ResponseCallBack.OnNetworkCall() {
@@ -196,6 +239,7 @@ public class LoginNetwork {
                             }
                             if (profile != null) {
                                 LoginPrefUtil.setRegComplete(context, true);
+                                LoginPrefUtil.setEmailOrMobile(context, emailOrMobile);
                                 LoginPrefUtil.setProfile(context, profile);
                                 callback.onSuccess(profile);
                             }else {
@@ -211,6 +255,11 @@ public class LoginNetwork {
 
                 @Override
                 public void onError(Exception e) {
+//                    if(LoginSDK.isDebugMode()){
+//                        LoginPrefUtil.setEmailOrMobile(context, emailOrMobile);
+//                        callback.onSuccess(new Profile());
+//                        return;
+//                    }
                     callback.onError(e);
                 }
             });

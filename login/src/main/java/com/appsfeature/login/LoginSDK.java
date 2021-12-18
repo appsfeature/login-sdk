@@ -27,6 +27,7 @@ public class LoginSDK {
     private boolean enableLogin = true;
     private boolean enableSignup = true;
     private boolean enableForgetPass = true;
+    private boolean enableAuthentication = true;
     private String titleLogin = "Login";
     private String titleSignup = "Sign up";
     private ApiInterface apiInterface;
@@ -53,6 +54,10 @@ public class LoginSDK {
             instance = new LoginSDK(context, baseUrl, isDebug);
         }
         return instance;
+    }
+
+    public static boolean isDebugMode() {
+        return BuildConfig.DEBUG;
     }
 
     public LoginSDK setFacebookLogin(boolean facebookLogin) {
@@ -245,5 +250,14 @@ public class LoginSDK {
 
     public HashMap<Integer, ApiRequest> getApiRequests() {
         return apiRequests;
+    }
+
+    public boolean isEnableAuthentication() {
+        return enableAuthentication;
+    }
+
+    public LoginSDK setEnableAuthentication(boolean enableAuthentication) {
+        this.enableAuthentication = enableAuthentication;
+        return this;
     }
 }

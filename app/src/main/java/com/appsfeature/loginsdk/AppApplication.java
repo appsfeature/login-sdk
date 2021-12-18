@@ -37,7 +37,7 @@ public class AppApplication extends Application {
                     .setGoogleLogin(true)
                     .setEmailLogin(true)
                     .setEnableForgetPass(false)
-                    .setEnableSignup(false)
+                    .setEnableSignup(true)
                     .addLoginListener(new LoginCallback.Listener() {
                         @Override
                         public void onSuccess(Profile response) {
@@ -69,16 +69,16 @@ public class AppApplication extends Application {
         hashMap.put(LoginType.SIGNUP, new ApiRequest("signup", RequestType.POST, map));
 
         map = new HashMap<>();
-        map.put(LoginParams.UserName, "username");
-        hashMap.put(LoginType.FORGET_PASSWORD, new ApiRequest("forgetPassword", RequestType.POST, map));
+        map.put(LoginParams.EmailOrMobile, "emailOrMobile");
+        hashMap.put(LoginType.GENERATE_OTP, new ApiRequest("generateOtp", RequestType.POST, map));
 
         map = new HashMap<>();
-        map.put(LoginParams.UserName, "username");
+        map.put(LoginParams.EmailOrMobile, "emailOrMobile");
         map.put(LoginParams.Otp, "otp");
         hashMap.put(LoginType.VALIDATE_OTP, new ApiRequest("validateOtp", RequestType.POST, map));
 
         map = new HashMap<>();
-        map.put(LoginParams.UserName, "username");
+        map.put(LoginParams.UserId, "userId");
         map.put(LoginParams.Password, "password");
         hashMap.put(LoginType.CHANGE_PASSWORD, new ApiRequest("changePassword", RequestType.POST, map));
 

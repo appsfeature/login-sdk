@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.appsfeature.login.fragment.ChangePassword;
 import com.appsfeature.login.fragment.ForgotPassword;
+import com.appsfeature.login.fragment.ScreenAuthentication;
 import com.appsfeature.login.fragment.ScreenLogin;
 import com.appsfeature.login.fragment.ScreenSignUp;
 import com.appsfeature.login.util.LoginPrefUtil;
@@ -65,9 +66,22 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onLoginSuccess() {
-                onLoginCompletedSuccessful();
+                if(LoginSDK.getInstance().isEnableAuthentication()){
+                    addAuthenticationScreen(LoginPrefUtil.getEmailOrMobile(LoginActivity.this));
+                }else {
+                    onLoginCompletedSuccessful();
+                }
             }
         }),R.id.login_container, "signup");
+    }
+
+    public void addAuthenticationScreen(String emailOrMobile) {
+        addFragmentWithoutBackstack(ScreenAuthentication.newInstance(emailOrMobile, new ScreenAuthentication.Listener() {
+            @Override
+            public void onAuthenticationCompleted() {
+                onLoginCompletedSuccessful();
+            }
+        }),R.id.login_container, "authentication");
     }
 
     public void addForgotPassword() {

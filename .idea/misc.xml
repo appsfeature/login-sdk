@@ -13,6 +13,9 @@
         <entry key="..\:/Workspace/DroidHelios/LoginSDK/login/src/main/res/layout/login_change_pass.xml" value="0.14375" />
         <entry key="..\:/Workspace/DroidHelios/LoginSDK/login/src/main/res/layout/login_forgot.xml" value="0.275" />
         <entry key="..\:/Workspace/DroidHelios/LoginSDK/login/src/main/res/layout/login_signup.xml" value="0.275" />
+        <entry key="..\:/Workspace/DroidHelios/login-sdk/login/src/main/res/layout/login_authentication.xml" value="0.275" />
+        <entry key="..\:/Workspace/DroidHelios/login-sdk/login/src/main/res/layout/login_change_pass.xml" value="0.275" />
+        <entry key="..\:/Workspace/DroidHelios/login-sdk/login/src/main/res/layout/login_forgot.xml" value="0.275" />
       </map>
     </option>
   </component>

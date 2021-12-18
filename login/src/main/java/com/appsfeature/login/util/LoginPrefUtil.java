@@ -106,12 +106,20 @@ public class LoginPrefUtil {
         return LoginPrefUtil.getBoolean(context, LoginConstant.SharedPref.IS_LOGIN_COMPLETE);
     }
 
+     public static String getEmailOrMobile(Context context) {
+        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.EMAIL_OR_MOBILE);
+    }
+
     public static void setRegComplete(Context context, boolean flag) {
         LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.IS_REGISTRATION_COMPLETE, flag);
     }
 
     public static void setLoginComplete(Context context, boolean flag) {
         LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.IS_LOGIN_COMPLETE, flag);
+    }
+
+    public static void setEmailOrMobile(Context context, String emailOrMobile) {
+        LoginPrefUtil.setString(context, LoginConstant.SharedPref.EMAIL_OR_MOBILE, emailOrMobile);
     }
 
     private static String getEmptyData(String data) {

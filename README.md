@@ -132,9 +132,9 @@ dependencies {
        }
      }
 
-     forgotPassword Api params are  : username
-     validateOtp Api params are     : username, otp
-     changePassword Api params are  : username, password
+     generateOtp Api params are  : emailOrMobile
+     validateOtp Api params are     : emailOrMobile, otp
+     changePassword Api params are  : userId, password
 
      Similar response for forgetPassword, validateOtp and changePassword.
      {

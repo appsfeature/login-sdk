@@ -2,6 +2,8 @@ package com.appsfeature.login.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,55 +23,61 @@ import com.progressbutton.ProgressButton;
 /**
  * @author Abhijit Rao on 5/22/2017.
  */
-public class ForgotPassword extends BaseFragment {
+public class ScreenAuthentication extends BaseFragment {
 
-    private EditText etEmailOrMobile, etOtp;
+    private EditText etOtp;
     private boolean isOtpSend;
     private Listener mListener;
     private ProgressButton btnAction;
     private Activity activity;
+    private String emailOrMobile;
+    private TextView tagMessage, tagResend;
+    private View llResend;
 
     public interface Listener {
-        void onAddSignupScreen();
-        void addPasswordChangeScreen();
-
+        void onAuthenticationCompleted();
     }
 
-    public static ForgotPassword newInstance(Listener mListener) {
-        ForgotPassword fragment = new ForgotPassword();
+    public static ScreenAuthentication newInstance(String emailOrMobile, Listener mListener) {
+        ScreenAuthentication fragment = new ScreenAuthentication();
+        fragment.emailOrMobile = emailOrMobile;
         fragment.mListener = mListener;
         LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
         return fragment;
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.login_forgot, container, false);
+        View v = inflater.inflate(R.layout.login_authentication, container, false);
         activity = getActivity();
-        initToolBarTheme(getActivity(), v, "Forgot Password");
+        initToolBarTheme(getActivity(), v, "Authentication Required");
         InitUI(v);
         return v;
     }
 
-    private void InitUI(View v) {
-        etEmailOrMobile = v.findViewById(R.id.et_employee_username);
-        etOtp = v.findViewById(R.id.et_employee_pin);
-        LinearLayout llSignup = v.findViewById(R.id.ll_signup);
+    @Override
+    public void onStart() {
+        super.onStart();
+        generateOtp();
+    }
 
-        TextView tagSignup = v.findViewById(R.id.tag_signup);
-        tagSignup.setText(LoginSDK.getInstance().getTitleSignup());
+    private void InitUI(View v) {
+        etOtp = v.findViewById(R.id.et_otp);
+        llResend = v.findViewById(R.id.ll_resend);
+        llResend.setVisibility(View.GONE);
+        tagMessage = v.findViewById(R.id.tag_message);
+        tagResend = v.findViewById(R.id.tag_resend);
 
         btnAction = ProgressButton.newInstance(getContext(), v)
-                .setText("Generate OTP")
+                .setText("Verify OTP")
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if(!isOtpSend) {
-                            if (!FieldValidation.isEmpty(getContext(), etEmailOrMobile)) {
+                            if (TextUtils.isEmpty(emailOrMobile)) {
                                 return;
                             }
+                            return;
                         } else if (!FieldValidation.isEmpty(getContext(), etOtp)) {
                             return;
                         }
@@ -77,57 +85,59 @@ public class ForgotPassword extends BaseFragment {
                         executeTask();
                     }
                 });
-
-
-        llSignup.setOnClickListener(new View.OnClickListener() {
+        llResend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mListener!=null){
-                    mListener.onAddSignupScreen();
-                }
+                generateOtp();
             }
         });
 
-        btnAction.setOnEditorActionListener(etOtp,"Send OTP");
+        btnAction.setOnEditorActionListener(etOtp,"Verify OTP");
+    }
 
+    private void generateOtp() {
+        isOtpSend = false;
+        if (TextUtils.isEmpty(emailOrMobile)) {
+            LoginUtil.showToast(activity, "Invalid Email or Mobile");
+            return;
+        }
+        LoginUtil.hideKeybord(activity);
+        executeTask();
     }
 
 
     private void executeTask() {
-        String emailOrMobile = etEmailOrMobile.getText().toString();
         String otp = etOtp.getText().toString();
 
         LoginNetwork.getInstance()
-                .forgotPassword(emailOrMobile, otp, isOtpSend, new NetworkListener<Boolean>() {
+                .authentication(emailOrMobile, otp, isOtpSend, new NetworkListener<Boolean>() {
                     @Override
                     public void onPreExecute() {
-                        btnAction.startProgress();
-
+                        if(isOtpSend) {
+                            btnAction.startProgress();
+                        }
                     }
 
                     @Override
                     public void onSuccess(Boolean response) {
                         if(!isOtpSend) {
-                            etEmailOrMobile.setVisibility(View.GONE);
-                            etOtp.setVisibility(View.VISIBLE);
-                            btnAction.setOnEditorActionListener(etOtp,"Submit");
                             isOtpSend = true;
-                            btnAction.revertProgress();
-                            btnAction.setText("Submit");
+                            llResend.setVisibility(View.VISIBLE);
+                            LoginUtil.showToast(activity, "OTP sent successful.");
                         }else{
                             btnAction.revertSuccessProgress(new ProgressButton.Listener() {
                                 @Override
                                 public void onAnimationCompleted() {
-                                    mListener.addPasswordChangeScreen();
+                                    mListener.onAuthenticationCompleted();
                                 }
                             });
                         }
-
                     }
 
                     @Override
                     public void onError(Exception e) {
                         btnAction.revertProgress();
+                        llResend.setVisibility(View.VISIBLE);
                         LoginUtil.showToast(activity, e.getMessage());
                     }
                 });

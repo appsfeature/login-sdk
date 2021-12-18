@@ -8,6 +8,7 @@ public class LoginConstant {
         String IS_LOGIN_COMPLETE = "isLogComplete";
         String IS_REGISTRATION_COMPLETE = "isRegComplete";
         String LOGIN_JSON = "login_json" ;
+        String EMAIL_OR_MOBILE = "email_or_mobile" ;
         String USER_NAME = "userName";
         String USER_PHOTO_URL = "photoUrl";
         String USER_ID_AUTO = "auto_id";
