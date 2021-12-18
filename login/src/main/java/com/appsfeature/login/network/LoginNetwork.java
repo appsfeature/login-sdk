@@ -1,13 +1,25 @@
 package com.appsfeature.login.network;
 
+import android.content.Context;
+import android.text.TextUtils;
+
 import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.interfaces.NetworkListener;
 import com.appsfeature.login.model.ApiRequest;
 import com.appsfeature.login.model.BaseModel;
 import com.appsfeature.login.model.Profile;
+import com.appsfeature.login.util.LoginPrefUtil;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LoginNetwork {
@@ -105,7 +117,7 @@ public class LoginNetwork {
         }
     }
 
-    public void loginUser(String username, String password, final NetworkListener<Profile> callback) {
+    public void loginUser(Context context, String username, String password, final NetworkListener<Profile> callback) {
         callback.onPreExecute();
         ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.LOGIN);
         if(apiRequest != null) {
@@ -117,14 +129,30 @@ public class LoginNetwork {
                 @Override
                 public void onComplete(boolean status, BaseModel data) {
                     try {
-                        if(status) {
-                            Profile profile = LoginSDK.getGson().fromJson(data.getData(), Profile.class);
-                            profile.setJsonData(data.getData());
-                            callback.onSuccess(profile);
+                        if(status && !TextUtils.isEmpty(data.getData())) {
+                            Profile profile = null;
+                            Object json = new JSONTokener(data.getData()).nextValue();
+                            if (json instanceof JSONObject) {
+                                profile = LoginSDK.getGson().fromJson(data.getData(), Profile.class);
+                                profile.setJsonData(data.getData());
+                            }else if (json instanceof JSONArray) {
+                                List<Profile> profileList = LoginSDK.getGson().fromJson(data.getData(),new TypeToken<List<Profile>>() {
+                                }.getType());
+                                if(profileList != null && profileList.size() > 0){
+                                    profile = profileList.get(0);
+                                    profile.setJsonData(data.getData());
+                                }
+                            }
+                            if (profile != null) {
+                                LoginPrefUtil.setProfile(context, profile);
+                                callback.onSuccess(profile);
+                            }else {
+                                callback.onError(new Exception(data.getMessage()));
+                            }
                         }else {
                             callback.onError(new Exception(data.getMessage()));
                         }
-                    } catch (JsonSyntaxException e) {
+                    } catch (JsonSyntaxException | JSONException e) {
                         callback.onError(e);
                     }
                 }
@@ -138,7 +166,7 @@ public class LoginNetwork {
 
     }
 
-    public void signUp(String name, String emailOrMobile, String username, String password, final NetworkListener<Profile> callback) {
+    public void signUp(Context context, String name, String emailOrMobile, String username, String password, final NetworkListener<Profile> callback) {
         callback.onPreExecute();
         ApiRequest apiRequest = LoginSDK.getInstance().getApiRequests().get(LoginType.SIGNUP);
         if(apiRequest != null) {
@@ -152,14 +180,31 @@ public class LoginNetwork {
                 @Override
                 public void onComplete(boolean status, BaseModel data) {
                     try {
-                        if(status) {
-                            Profile profile = LoginSDK.getGson().fromJson(data.getData(), Profile.class);
-                            profile.setJsonData(data.getData());
-                            callback.onSuccess(profile);
+                        if(status && !TextUtils.isEmpty(data.getData())) {
+                            Profile profile = null;
+                            Object json = new JSONTokener(data.getData()).nextValue();
+                            if (json instanceof JSONObject) {
+                                profile = LoginSDK.getGson().fromJson(data.getData(), Profile.class);
+                                profile.setJsonData(data.getData());
+                            }else if (json instanceof JSONArray) {
+                                List<Profile> profileList = LoginSDK.getGson().fromJson(data.getData(),new TypeToken<List<Profile>>() {
+                                }.getType());
+                                if(profileList != null && profileList.size() > 0){
+                                    profile = profileList.get(0);
+                                    profile.setJsonData(data.getData());
+                                }
+                            }
+                            if (profile != null) {
+                                LoginPrefUtil.setRegComplete(context, true);
+                                LoginPrefUtil.setProfile(context, profile);
+                                callback.onSuccess(profile);
+                            }else {
+                                callback.onError(new Exception(data.getMessage()));
+                            }
                         }else {
                             callback.onError(new Exception(data.getMessage()));
                         }
-                    } catch (JsonSyntaxException e) {
+                    } catch (JsonSyntaxException | JSONException e) {
                         callback.onError(e);
                     }
                 }

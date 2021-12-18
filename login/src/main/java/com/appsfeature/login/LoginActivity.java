@@ -28,13 +28,13 @@ public class LoginActivity extends BaseActivity {
 
     private void onLoginCompletedSuccessful() {
         finish();
-        LoginSDK.getInstance().dispatchLoginListener(LoginSDK.getLoginCredentials(), null);
+        LoginSDK.getInstance().dispatchLoginListener(LoginSDK.getLoginCredentials(this), null);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        LoginSDK.getInstance().dispatchLoginListener(LoginSDK.getLoginCredentials(), new Exception("Login failed."));
+        LoginSDK.getInstance().dispatchLoginListener(LoginSDK.getLoginCredentials(this), new Exception("Login failed."));
     }
 
     public void addLoginScreen() {

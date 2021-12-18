@@ -35,8 +35,8 @@ public class LoginSDK {
     private final HashMap<Integer, LoginCallback.Listener> mLoginListener = new HashMap<>();
     private HashMap<Integer, ApiRequest> apiRequests;
 
-    public static Profile getLoginCredentials() {
-        return new Profile();
+    public static Profile getLoginCredentials(Context context) {
+        return LoginPrefUtil.getUserProfile(context);
     }
 
     private LoginSDK(Context context, String baseUrl, boolean isDebug) {
@@ -86,8 +86,12 @@ public class LoginSDK {
         }
     }
 
-    public void openLoginPage(final Context context, final boolean isOpenProfile) {
-        openLoginPage(context, isOpenProfile, false);
+    public void openLoginPage(final Context context) {
+        if (!LoginPrefUtil.isLoginComplete(context)) {
+            context.startActivity(new Intent(context, LoginActivity.class));
+        }else {
+            LoginUtil.showToast(context, "User already logged in.");
+        }
     }
 
     public void openLoginPage(final Context context, final boolean isOpenProfile, final boolean isOpenEditProfile) {
@@ -96,6 +100,8 @@ public class LoginSDK {
                     .putExtra(LoginConstant.OPEN_EDIT_PROFILE, isOpenEditProfile));
         } else if (!LoginPrefUtil.isLoginComplete(context)) {
             context.startActivity(new Intent(context, LoginActivity.class));
+        }else {
+            LoginUtil.showToast(context, "Already logged in.");
         }
     }
 
@@ -118,6 +124,11 @@ public class LoginSDK {
     public String getEmailId(Context context) {
         return LoginPrefUtil.getEmailId(context);
     }
+
+    public String getProfileJson(Context context) {
+        return LoginPrefUtil.getProfileJson(context);
+    }
+
     public Profile getUserProfile(Context context) {
         return LoginUtil.getUserProfileData(context);
     }

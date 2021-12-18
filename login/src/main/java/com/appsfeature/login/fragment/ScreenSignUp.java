@@ -119,7 +119,7 @@ public class ScreenSignUp extends BaseFragment {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
         LoginNetwork.getInstance()
-                .signUp(name, emailOrMobile, username, password, new NetworkListener<Profile>() {
+                .signUp(activity, name, emailOrMobile, username, password, new NetworkListener<Profile>() {
                     @Override
                     public void onPreExecute() {
                         btnAction.startProgress();

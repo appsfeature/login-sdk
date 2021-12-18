@@ -123,7 +123,7 @@ public class ScreenLogin extends BaseFragment {
         String password = etPassword.getText().toString();
 
         LoginNetwork.getInstance()
-                .loginUser(username, password, new NetworkListener<Profile>() {
+                .loginUser(activity, username, password, new NetworkListener<Profile>() {
                     @Override
                     public void onPreExecute() {
                         btnAction.startProgress();

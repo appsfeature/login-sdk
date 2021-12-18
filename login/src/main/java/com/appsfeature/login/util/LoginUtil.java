@@ -79,6 +79,7 @@ public class LoginUtil {
         profile.setMobile(LoginSDK.getInstance().getUserMobile(context));
         profile.setEmail(LoginSDK.getInstance().getEmailId(context));
         profile.setImage(LoginSDK.getInstance().getUserImage(context));
+        profile.setJsonData(LoginSDK.getInstance().getProfileJson(context));
         return profile;
     }
 

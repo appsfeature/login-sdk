@@ -17,6 +17,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onLoginOpen(View view) {
         AppApplication.getInstance().getLoginSdk()
-                .openLoginPage(this, false);
+                .openLoginPage(this);
     }
 }

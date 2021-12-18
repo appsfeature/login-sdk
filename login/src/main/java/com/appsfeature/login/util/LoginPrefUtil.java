@@ -4,40 +4,38 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
-import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.model.Profile;
+import com.google.gson.Gson;
 
 public class LoginPrefUtil {
 
-    private static final String TAG = "LoginPrefUtil";
-
     public static String getString(Context context, String key) {
         if (getDefaultSharedPref(context) != null) {
-            return decrypt(getDefaultSharedPref(context).getString(encrypt(key), ""));
+            return getDefaultSharedPref(context).getString(key, "");
         } else {
-            return decrypt("");
+            return "";
         }
     }
 
     public static int getInt(Context context, String key) {
         if (getDefaultSharedPref(context) != null) {
-            return getDefaultSharedPref(context).getInt(encrypt(key), 0);
+            return getDefaultSharedPref(context).getInt(key, 0);
         } else {
             return (0);
         }
     }
 
     public static int getIntDef(Context context, String key, int def) {
-        return getDefaultSharedPref(context).getInt(encrypt(key), def);
+        return getDefaultSharedPref(context).getInt(key, def);
     }
 
     public static float getFloat(Context context, String key) {
-        return getDefaultSharedPref(context).getFloat(encrypt(key), 0);
+        return getDefaultSharedPref(context).getFloat(key, 0);
 
     }
 
     public static long getLong(Context context, String key) {
-        return getDefaultSharedPref(context).getLong(encrypt(key), 0);
+        return getDefaultSharedPref(context).getLong(key, 0);
     }
 
     public static boolean getBoolean(Context context, String key) {
@@ -48,40 +46,22 @@ public class LoginPrefUtil {
         }
     }
 
-
-    private static String encrypt(String input) {
-        // This is base64 encoding, which is not an encryption
-        return input;
-//        if (SupportUtil.isEmptyOrNull( input )) {
-//            return input ;
-//        } else {
-//            return Base64.encodeToString(input.getBytes(), Base64.DEFAULT);
-//        }
-    }
-
-    private static String decrypt(String input) {
-        return input;
-//        if (SupportUtil.isEmptyOrNull( input )) {
-//            return input ;
-//        } else {
-//            return new String(Base64.decode(input, Base64.DEFAULT));
-//        }
-    }
-
     /**
      * Set String value for a particular key.
      *
      */
     public static void setProfile(Context context, Profile profile) {
-        if (getDefaultSharedPref(context) != null) {
+        if (getDefaultSharedPref(context) != null && profile != null) {
             final SharedPreferences.Editor editor = getDefaultSharedPref(context).edit();
             if (editor != null) {
-                editor.putString(encrypt(LoginConstant.SharedPref.USER_ID_AUTO), getEmptyData(profile.getUserId()));
-                editor.putString(encrypt(LoginConstant.SharedPref.USER_NAME), getEmptyData(profile.getName()));
-                editor.putString(encrypt(LoginConstant.SharedPref.USER_PHOTO_URL), getEmptyData(profile.getImage()));
-                editor.putString(encrypt(LoginConstant.SharedPref.USER_PHONE), getEmptyData(profile.getMobile()));
-                editor.putString(encrypt(LoginConstant.SharedPref.USER_EMAIL), getEmptyData(profile.getEmail()));
-                editor.apply();
+                editor.putBoolean(LoginConstant.SharedPref.IS_LOGIN_COMPLETE, true);
+                editor.putString(LoginConstant.SharedPref.USER_ID_AUTO, getEmptyData(profile.getUserId()));
+                editor.putString(LoginConstant.SharedPref.USER_NAME, getEmptyData(profile.getName()));
+                editor.putString(LoginConstant.SharedPref.USER_PHOTO_URL, getEmptyData(profile.getImage()));
+                editor.putString(LoginConstant.SharedPref.USER_PHONE, getEmptyData(profile.getMobile()));
+                editor.putString(LoginConstant.SharedPref.USER_EMAIL, getEmptyData(profile.getEmail()));
+                editor.putString(LoginConstant.SharedPref.LOGIN_JSON, getEmptyData(profile.getJsonData()));
+                editor.commit();
             }
         }
     }
@@ -105,6 +85,15 @@ public class LoginPrefUtil {
     public static String getEmailId(Context context) {
         return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_EMAIL);
     }
+
+    public static String getProfileJson(Context context) {
+        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.LOGIN_JSON);
+    }
+
+    public static <T> T getProfileModel(Context context, Class<T> classOfT) {
+        return new Gson().fromJson(getProfileJson(context), classOfT);
+    }
+
     public static Profile getUserProfile(Context context) {
         return LoginUtil.getUserProfileData(context);
     }
@@ -134,8 +123,8 @@ public class LoginPrefUtil {
             final SharedPreferences.Editor editor = getDefaultSharedPref(context).edit();
             if (editor != null) {
                 for (String keys : values) {
-                    editor.putString(encrypt(key), encrypt(keys));
-                    editor.apply();
+                    editor.putString(key, keys);
+                    editor.commit();
                 }
             }
         }
@@ -151,8 +140,8 @@ public class LoginPrefUtil {
         if (getDefaultSharedPref(context) != null && !TextUtils.isEmpty(key)) {
             final SharedPreferences.Editor editor = getDefaultSharedPref(context).edit();
             if (editor != null) {
-                editor.putInt(encrypt(key), value);
-                editor.apply();
+                editor.putInt(key, value);
+                editor.commit();
             }
         }
     }
@@ -165,8 +154,8 @@ public class LoginPrefUtil {
      */
     public static void setFloat(Context context, String key, float value) {
         final SharedPreferences.Editor editor = getDefaultSharedPref(context).edit();
-        editor.putFloat(encrypt(key), value);
-        editor.apply();
+        editor.putFloat(key, value);
+        editor.commit();
     }
 
     /**
@@ -177,8 +166,8 @@ public class LoginPrefUtil {
      */
     public static void setLong(Context context, String key, long value) {
         final SharedPreferences.Editor editor = getDefaultSharedPref(context).edit();
-        editor.putLong(encrypt(key), value);
-        editor.apply();
+        editor.putLong(key, value);
+        editor.commit();
     }
 
     /**
@@ -191,8 +180,8 @@ public class LoginPrefUtil {
         if (getDefaultSharedPref(context) != null && !TextUtils.isEmpty(key)) {
             final SharedPreferences.Editor editor = getDefaultSharedPref(context).edit();
             if (editor != null) {
-                editor.putBoolean(encrypt(key), value);
-                editor.apply();
+                editor.putBoolean(key, value);
+                editor.commit();
             }
         }
     }
@@ -203,7 +192,7 @@ public class LoginPrefUtil {
     public static void clearPreferences(Context context) {
         final SharedPreferences.Editor editor = getDefaultSharedPref(context).edit();
         editor.clear();
-        editor.apply();
+        editor.commit();
     }
 
     private static SharedPreferences sharedPreferences;
