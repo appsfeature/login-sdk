@@ -1,6 +1,7 @@
 package com.appsfeature.login.model;
 
-import com.appsfeature.login.network.RequestType;
+
+import com.formbuilder.interfaces.RequestType;
 
 import java.util.Map;
 

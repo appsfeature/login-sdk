@@ -102,7 +102,6 @@ public class ForgotPassword extends BaseFragment {
                     @Override
                     public void onPreExecute() {
                         btnAction.startProgress();
-
                     }
 
                     @Override

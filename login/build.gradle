@@ -29,6 +29,7 @@ android {
 dependencies {
     implementation "androidx.appcompat:appcompat:$rootProject.ext.appcompat"
     implementation "androidx.cardview:cardview:$rootProject.ext.cardview"
+    implementation "com.google.android.material:material:$rootProject.ext.material"
 
     implementation 'com.github.appsfeature:progress-button:1.0'
 
@@ -36,5 +37,5 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit_version"
     implementation "com.squareup.okhttp3:okhttp:$rootProject.ext.retrofit_okhttp_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.retrofit_okhttp_version"
-
+    implementation 'com.github.appsfeature:form-builder:1.3'
 }

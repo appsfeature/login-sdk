@@ -32,5 +32,6 @@ dependencies {
     implementation project(path: ':login')
     implementation "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit_version"
+    implementation 'com.github.appsfeature:form-builder:1.3'
 
 }

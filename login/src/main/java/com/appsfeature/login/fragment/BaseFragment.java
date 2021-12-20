@@ -1,11 +1,11 @@
 package com.appsfeature.login.fragment;
 
 import android.app.Activity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
 
 import com.appsfeature.login.R;
 import com.appsfeature.login.util.LoginUtil;

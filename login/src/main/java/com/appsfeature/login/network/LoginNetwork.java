@@ -9,6 +9,7 @@ import com.appsfeature.login.model.ApiRequest;
 import com.appsfeature.login.model.BaseModel;
 import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.util.LoginPrefUtil;
+import com.formbuilder.interfaces.RequestType;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 

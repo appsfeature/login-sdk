@@ -1,5 +1,10 @@
 package com.appsfeature.login.model;
 
+import android.content.Context;
+import android.text.TextUtils;
+
+import com.appsfeature.login.util.LoginConstant;
+import com.appsfeature.login.util.LoginPrefUtil;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -74,6 +79,14 @@ public class Profile {
 
     public void setJsonData(String jsonData) {
         this.jsonData = jsonData;
+    }
+
+    public String getEmailOrMobile() {
+        if(!TextUtils.isEmpty(mobile)){
+            return mobile;
+        }else {
+            return email;
+        }
     }
 
     public <T> T getJsonModel(Class<T> classOfT) {

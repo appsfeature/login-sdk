@@ -11,6 +11,7 @@ import com.appsfeature.login.network.RetrofitGenerator;
 import com.appsfeature.login.util.LoginConstant;
 import com.appsfeature.login.util.LoginPrefUtil;
 import com.appsfeature.login.util.LoginUtil;
+import com.formbuilder.model.FormBuilderModel;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -35,6 +36,7 @@ public class LoginSDK {
     private LoginCallback.TermUseListener termsOfUseListener;
     private final HashMap<Integer, LoginCallback.Listener> mLoginListener = new HashMap<>();
     private HashMap<Integer, ApiRequest> apiRequests;
+    private FormBuilderModel signupFormDetail;
 
     public static Profile getLoginCredentials(Context context) {
         return LoginPrefUtil.getUserProfile(context);
@@ -259,5 +261,14 @@ public class LoginSDK {
     public LoginSDK setEnableAuthentication(boolean enableAuthentication) {
         this.enableAuthentication = enableAuthentication;
         return this;
+    }
+
+    public LoginSDK setSignupForm(FormBuilderModel signupFormDetail) {
+        this.signupFormDetail = signupFormDetail;
+        return this;
+    }
+
+    public FormBuilderModel getSignupFormDetail() {
+        return signupFormDetail;
     }
 }
