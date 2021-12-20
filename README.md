@@ -9,6 +9,16 @@ allprojects {
     repositories {
         maven { url 'https://jitpack.io' }
     }
+
+    ext {
+        appcompat = '1.3.0'
+        cardview = '1.0.0'
+        material = '1.3.0'
+        retrofit_version = '2.9.0'
+        retrofit_okhttp_version = '4.8.1'
+
+        form_builder = '1.3'
+    }
 }
 ```
 #### Dependency
@@ -18,7 +28,7 @@ dependencies {
     implementation 'com.github.appsfeature:login-sdk:1.0'
 
     //Add this dependency if you need to make dynamic signup form.
-    implementation 'com.github.appsfeature:form-builder:1.3'
+    implementation "com.github.appsfeature:form-builder:$rootProject.ext.form_builder"
 }
 ```
  
