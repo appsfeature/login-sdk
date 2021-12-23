@@ -7,8 +7,8 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 
-import com.appsfeature.login.LoginActivity;
 import com.appsfeature.login.LoginSDK;
+import com.appsfeature.login.interfaces.LoginType;
 import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.util.LoginPrefUtil;
 import com.formbuilder.FormBuilder;
@@ -22,13 +22,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void onLoginOpen(View view) {
+    public void onLoginUser(View view) {
         AppApplication.getInstance().getLoginSdk()
-                .openLoginPage(this);
+                .openLoginPage(this, LoginType.DEFAULT_USER);
     }
 
-    public void onAttachFragment(View view) {
-        Fragment fragment = FormBuilder.getInstance().getFragment(LoginSDK.getInstance().getSignupFormDetail(), new FormResponse.FormSubmitListener() {
+    public void onLoginAdmin(View view) {
+        AppApplication.getInstance().getLoginSdk()
+                .openLoginPage(this, LoginType.ADMIN);
+    }
+
+    public void onClearPreferences(View view) {
+        LoginPrefUtil.clearPreferences(this);
+    }
+
+    public void onAttachFragment(@LoginType int loginType) {
+        Fragment fragment = FormBuilder.getInstance().getFragment(LoginSDK.getInstance().getSignupFormDetail().get(loginType), new FormResponse.FormSubmitListener() {
             @Override
             public void onFormSubmitted(String data) {
                 Profile profile = LoginSDK.getGson().fromJson(data, Profile.class);

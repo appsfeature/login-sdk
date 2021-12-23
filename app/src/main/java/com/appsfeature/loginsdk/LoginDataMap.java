@@ -1,8 +1,10 @@
 package com.appsfeature.loginsdk;
 
+import com.appsfeature.login.interfaces.ApiRequestType;
+import com.appsfeature.login.interfaces.ApiType;
+import com.appsfeature.login.interfaces.LoginType;
 import com.appsfeature.login.model.ApiRequest;
 import com.appsfeature.login.network.LoginParams;
-import com.appsfeature.login.network.LoginType;
 import com.formbuilder.interfaces.FieldInputType;
 import com.formbuilder.interfaces.FieldType;
 import com.formbuilder.interfaces.RequestType;
@@ -20,44 +22,77 @@ public class LoginDataMap {
 
     public static final String LOGIN_BASE_URL = "http://allinoneglobalmarket.com/mobile_app/";
 
-    public static HashMap<Integer, ApiRequest> getApiRequestKeys() {
+    public static HashMap<Integer, HashMap<Integer, ApiRequest>> getApiRequestKeys() {
+        HashMap<Integer, HashMap<Integer, ApiRequest>> loginMap = new HashMap<>();
+        loginMap.put(LoginType.DEFAULT_USER, getApiRequestKeysForUserLogin());
+        loginMap.put(LoginType.ADMIN, getApiRequestKeysForAdminLogin());
+        return loginMap;
+    }
+
+    public static HashMap<Integer, ApiRequest> getApiRequestKeysForUserLogin() {
         HashMap<Integer, ApiRequest> hashMap = new HashMap<>();
         Map<String, String> map;
         map = new HashMap<>();
         map.put(LoginParams.UserName, "email");
         map.put(LoginParams.Password, "password");
-        hashMap.put(LoginType.LOGIN, new ApiRequest("login_ap", RequestType.POST_FORM, map));
+        hashMap.put(ApiType.LOGIN, new ApiRequest( "Login", "login_ap", ApiRequestType.POST_FORM, map));
 
         map = new HashMap<>();
         map.put(LoginParams.Name, "name");
         map.put(LoginParams.EmailOrMobile, "emailOrMobile");
         map.put(LoginParams.UserName, "username");
         map.put(LoginParams.Password, "password");
-        hashMap.put(LoginType.SIGNUP, new ApiRequest("signup", RequestType.POST, map));
+        hashMap.put(ApiType.SIGNUP, new ApiRequest("Signup","signup", ApiRequestType.POST, map));
 
         map = new HashMap<>();
         map.put(LoginParams.EmailOrMobile, "emailOrMobile");
-        hashMap.put(LoginType.GENERATE_OTP, new ApiRequest("generateOtp", RequestType.POST, map));
+        hashMap.put(ApiType.GENERATE_OTP, new ApiRequest("generateOtp", ApiRequestType.POST, map));
 
         map = new HashMap<>();
         map.put(LoginParams.EmailOrMobile, "emailOrMobile");
         map.put(LoginParams.Otp, "otp");
-        hashMap.put(LoginType.VALIDATE_OTP, new ApiRequest("validateOtp", RequestType.POST, map));
+        hashMap.put(ApiType.VALIDATE_OTP, new ApiRequest("validateOtp", ApiRequestType.GET, map));
 
         map = new HashMap<>();
         map.put(LoginParams.UserId, "userId");
         map.put(LoginParams.Password, "password");
-        hashMap.put(LoginType.CHANGE_PASSWORD, new ApiRequest("changePassword", RequestType.POST, map));
+        hashMap.put(ApiType.CHANGE_PASSWORD, new ApiRequest("changePassword", ApiRequestType.POST, map));
 
         return hashMap;
     }
 
-    public static FormBuilderModel getSignupFormDetail() {
+    public static HashMap<Integer, ApiRequest> getApiRequestKeysForAdminLogin() {
+        HashMap<Integer, ApiRequest> hashMap = new HashMap<>();
+        Map<String, String> map;
+        map = new HashMap<>();
+        map.put(LoginParams.UserName, "email");
+        map.put(LoginParams.Password, "password");
+        hashMap.put(ApiType.LOGIN, new ApiRequest( "Admin Login", "login-admin", ApiRequestType.POST_FORM, map));
+
+        map = new HashMap<>();
+        map.put(LoginParams.Name, "name");
+        map.put(LoginParams.EmailOrMobile, "emailOrMobile");
+        map.put(LoginParams.UserName, "username");
+        map.put(LoginParams.Password, "password");
+        hashMap.put(ApiType.SIGNUP, new ApiRequest("Admin Registration","signup-admin", ApiRequestType.POST, map));
+        return hashMap;
+    }
+
+    public static HashMap<Integer, FormBuilderModel> getSignupFormDetail() {
+        HashMap<Integer, FormBuilderModel> loginMap = new HashMap<>();
+        loginMap.put(LoginType.DEFAULT_USER, getSignupFormDetail("Signup"));
+        loginMap.put(LoginType.ADMIN, getSignupFormDetail("Admin Registration"));
+        return loginMap;
+    }
+
+
+    public static FormBuilderModel getSignupFormDetail(String title) {
         FormBuilderModel item = new FormBuilderModel();
-        item.setTitle("Signup");
+        item.setTitle(title);
         item.setSubTitle("Want to sign up fill out this form!");
         item.setBaseUrl(LOGIN_BASE_URL);
         item.setRequestApi("signup");
+        item.setShowActionbar(true);
         item.setRequestType(RequestType.POST_FORM);
         item.setSubmissionType(SubmissionType.KEY_VALUE_PAIR);
         item.setPopup(getPopup());
@@ -110,7 +145,7 @@ public class LoginDataMap {
         item.setInputType(FieldInputType.phone);
         item.setFieldType(FieldType.EDIT_TEXT);
         item.setMaxLength(10);
-        item.setFieldSuggestions("[\"9891983694\"]");
+        item.setFieldSuggestions("[\"9876543210\"]");
         fieldList.add(item);
 
         item = new DynamicInputModel();

@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
+import com.appsfeature.login.interfaces.ApiType;
 import com.appsfeature.login.interfaces.NetworkListener;
 import com.appsfeature.login.network.LoginNetwork;
 import com.appsfeature.login.util.FieldValidation;
@@ -35,9 +36,10 @@ public class ForgotPassword extends BaseFragment {
 
     }
 
-    public static ForgotPassword newInstance(Listener mListener) {
+    public static ForgotPassword newInstance(Bundle bundle, Listener mListener) {
         ForgotPassword fragment = new ForgotPassword();
         fragment.mListener = mListener;
+        fragment.setArguments(bundle);
         LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
         return fragment;
     }
@@ -57,9 +59,15 @@ public class ForgotPassword extends BaseFragment {
         etEmailOrMobile = v.findViewById(R.id.et_employee_username);
         etOtp = v.findViewById(R.id.et_employee_pin);
         LinearLayout llSignup = v.findViewById(R.id.ll_signup);
+        LinearLayout llDivider = v.findViewById(R.id.ll_divider);
+
+        if(!LoginSDK.getInstance().isEnableSignup(apiRequestMap.get(ApiType.SIGNUP))){
+            llSignup.setVisibility(View.GONE);
+            llDivider.setVisibility(View.GONE);
+        }
 
         TextView tagSignup = v.findViewById(R.id.tag_signup);
-        tagSignup.setText(LoginSDK.getInstance().getTitleSignup());
+        tagSignup.setText(getString(R.string.sign_up));
 
         btnAction = ProgressButton.newInstance(getContext(), v)
                 .setText("Generate OTP")
@@ -97,7 +105,7 @@ public class ForgotPassword extends BaseFragment {
         String emailOrMobile = etEmailOrMobile.getText().toString();
         String otp = etOtp.getText().toString();
 
-        LoginNetwork.getInstance()
+        LoginNetwork.get(loginType)
                 .forgotPassword(activity, emailOrMobile, otp, isOtpSend, new NetworkListener<Boolean>() {
                     @Override
                     public void onPreExecute() {

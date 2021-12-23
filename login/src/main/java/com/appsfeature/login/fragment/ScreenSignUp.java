@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
+import com.appsfeature.login.interfaces.ApiType;
 import com.appsfeature.login.interfaces.NetworkListener;
 import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.network.LoginNetwork;
@@ -38,8 +39,9 @@ public class ScreenSignUp extends BaseFragment {
         void onLoginSuccess();
     }
 
-    public static ScreenSignUp newInstance(Listener mListener) {
+    public static ScreenSignUp newInstance(Bundle bundle, Listener mListener) {
         ScreenSignUp fragment = new ScreenSignUp();
+        fragment.setArguments(bundle);
         fragment.mListener = mListener;
         LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
         return fragment;
@@ -50,7 +52,7 @@ public class ScreenSignUp extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.login_signup, container, false);
         activity = getActivity();
-        initToolBarTheme(activity, v, LoginSDK.getInstance().getTitleSignup());
+        initToolBarTheme(activity, v, getTitle(apiRequestMap.get(ApiType.SIGNUP), "Signup"));
         InitUI(v);
         return v;
     }
@@ -62,7 +64,7 @@ public class ScreenSignUp extends BaseFragment {
         etUsername = v.findViewById(R.id.et_username);
         etPassword = v.findViewById(R.id.et_password);
         TextView tagLogin = v.findViewById(R.id.tag_login);
-        tagLogin.setText(LoginSDK.getInstance().getTitleLogin());
+        tagLogin.setText(getString(R.string.login));
 
         LinearLayout llTearms = v.findViewById(R.id.ll_tearm_user);
         LinearLayout llLogin = v.findViewById(R.id.ll_login);
@@ -72,7 +74,7 @@ public class ScreenSignUp extends BaseFragment {
         }
 
         btnAction = ProgressButton.newInstance(getContext(), v)
-                .setText(LoginSDK.getInstance().getTitleSignup())
+                .setText(getString(R.string.sign_up))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -118,7 +120,7 @@ public class ScreenSignUp extends BaseFragment {
         String emailOrMobile = etEmailOrMobile.getText().toString();
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
-        LoginNetwork.getInstance()
+        LoginNetwork.get(loginType)
                 .signUp(activity, name, emailOrMobile, username, password, new NetworkListener<Profile>() {
                     @Override
                     public void onPreExecute() {

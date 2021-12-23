@@ -13,7 +13,9 @@ import android.widget.TextView;
 import com.appsfeature.login.BuildConfig;
 import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
+import com.appsfeature.login.interfaces.ApiType;
 import com.appsfeature.login.interfaces.NetworkListener;
+import com.appsfeature.login.model.ApiRequest;
 import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.network.LoginNetwork;
 import com.appsfeature.login.util.FieldValidation;
@@ -38,8 +40,9 @@ public class ScreenLogin extends BaseFragment {
         void onLoginSuccess();
     }
 
-    public static ScreenLogin newInstance(Listener mListener) {
+    public static ScreenLogin newInstance(Bundle bundle, Listener mListener) {
         ScreenLogin fragment = new ScreenLogin();
+        fragment.setArguments(bundle);
         fragment.mListener = mListener;
         LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
         return fragment;
@@ -50,7 +53,7 @@ public class ScreenLogin extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.login_admin, container, false);
         activity = getActivity();
-        initToolBarTheme(activity, v, LoginSDK.getInstance().getTitleLogin());
+        initToolBarTheme(activity, v, getTitle(apiRequestMap.get(ApiType.LOGIN), "Login"));
         InitUI(v);
         return v;
     }
@@ -69,23 +72,23 @@ public class ScreenLogin extends BaseFragment {
         LinearLayout llForgot = v.findViewById(R.id.ll_forgot);
         LinearLayout llDivider = v.findViewById(R.id.ll_divider);
 
-        if(!LoginSDK.getInstance().isEnableSignup()){
+        if(!LoginSDK.getInstance().isEnableSignup(apiRequestMap.get(ApiType.SIGNUP))){
             llSignup.setVisibility(View.GONE);
         }
 
-        if(!LoginSDK.getInstance().isEnableForgetPass()){
+        if(!LoginSDK.getInstance().isEnableForgetPass(apiRequestMap.get(ApiType.GENERATE_OTP))){
             llForgot.setVisibility(View.GONE);
         }
 
-        if(!LoginSDK.getInstance().isEnableSignup() && !LoginSDK.getInstance().isEnableForgetPass()){
+        if(!LoginSDK.getInstance().isEnableSignup(apiRequestMap.get(ApiType.SIGNUP)) && !LoginSDK.getInstance().isEnableForgetPass(apiRequestMap.get(ApiType.GENERATE_OTP))){
             llDivider.setVisibility(View.GONE);
         }
 
         TextView tagSignup = v.findViewById(R.id.tag_signup);
-        tagSignup.setText(LoginSDK.getInstance().getTitleSignup());
+        tagSignup.setText(getString(R.string.sign_up));
 
         btnAction = ProgressButton.newInstance(getContext(), v)
-                .setText(LoginSDK.getInstance().getTitleLogin())
+                .setText(getString(R.string.login))
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -122,7 +125,7 @@ public class ScreenLogin extends BaseFragment {
         String username = etUsername.getText().toString();
         String password = etPassword.getText().toString();
 
-        LoginNetwork.getInstance()
+        LoginNetwork.get(loginType)
                 .loginUser(activity, username, password, new NetworkListener<Profile>() {
                     @Override
                     public void onPreExecute() {

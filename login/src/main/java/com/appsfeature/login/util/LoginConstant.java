@@ -3,6 +3,7 @@ package com.appsfeature.login.util;
 public class LoginConstant {
 
     public static final String OPEN_EDIT_PROFILE = "isOpenEditProfile";
+    public static final String LOGIN_TYPE = "loginType";
 
     public interface SharedPref {
         String IS_LOGIN_COMPLETE = "isLogComplete";

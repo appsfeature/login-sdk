@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
+import com.appsfeature.login.interfaces.ApiType;
 import com.appsfeature.login.interfaces.NetworkListener;
 import com.appsfeature.login.network.LoginNetwork;
 import com.appsfeature.login.util.LoginUtil;
@@ -34,8 +35,9 @@ public class ChangePassword extends BaseFragment {
         void onPasswordChangedSuccess();
     }
 
-    public static ChangePassword newInstance(String userId, Listener mListener) {
+    public static ChangePassword newInstance(Bundle bundle, String userId, Listener mListener) {
         ChangePassword fragment = new ChangePassword();
+        fragment.setArguments(bundle);
         fragment.userId = userId;
         fragment.mListener = mListener;
         LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
@@ -57,8 +59,11 @@ public class ChangePassword extends BaseFragment {
         EditText etConfirmPassword = v.findViewById(R.id.et_employee_confirm_pass);
         LinearLayout llSignup = v.findViewById(R.id.ll_signup);
 
+        if(!LoginSDK.getInstance().isEnableSignup(apiRequestMap.get(ApiType.SIGNUP))){
+            llSignup.setVisibility(View.GONE);
+        }
         TextView tagSignup = v.findViewById(R.id.tag_signup);
-        tagSignup.setText(LoginSDK.getInstance().getTitleSignup());
+        tagSignup.setText(getString(R.string.sign_up));
 
         btnAction = ProgressButton.newInstance(getContext(), v)
                 .setText("Send Request")
@@ -69,7 +74,7 @@ public class ChangePassword extends BaseFragment {
                         executeTask();
                     }
                 });
-        btnAction.setText(LoginSDK.getInstance().getTitleLogin());
+        btnAction.setText(getString(R.string.login));
 
 
         llSignup.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +93,7 @@ public class ChangePassword extends BaseFragment {
 
     private void executeTask() {
         String newPassword = etNewPassword.getText().toString();
-        LoginNetwork.getInstance()
+        LoginNetwork.get(loginType)
                 .changePassword(userId, newPassword, new NetworkListener<Boolean>() {
                     @Override
                     public void onPreExecute() {

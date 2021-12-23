@@ -2,17 +2,14 @@ package com.appsfeature.login.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
 import com.appsfeature.login.interfaces.NetworkListener;
 import com.appsfeature.login.network.LoginNetwork;
@@ -38,8 +35,9 @@ public class ScreenAuthentication extends BaseFragment {
         void onAuthenticationCompleted();
     }
 
-    public static ScreenAuthentication newInstance(String emailOrMobile, Listener mListener) {
+    public static ScreenAuthentication newInstance(Bundle bundle, String emailOrMobile, Listener mListener) {
         ScreenAuthentication fragment = new ScreenAuthentication();
+        fragment.setArguments(bundle);
         fragment.emailOrMobile = emailOrMobile;
         fragment.mListener = mListener;
         LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
@@ -109,7 +107,7 @@ public class ScreenAuthentication extends BaseFragment {
     private void executeTask() {
         String otp = etOtp.getText().toString();
 
-        LoginNetwork.getInstance()
+        LoginNetwork.get(loginType)
                 .authentication(activity, emailOrMobile, otp, isOtpSend, new NetworkListener<Boolean>() {
                     @Override
                     public void onPreExecute() {

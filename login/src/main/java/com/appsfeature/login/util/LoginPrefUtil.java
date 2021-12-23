@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 
+import com.appsfeature.login.interfaces.LoginType;
 import com.appsfeature.login.model.Profile;
 import com.google.gson.Gson;
 
@@ -49,84 +50,96 @@ public class LoginPrefUtil {
     /**
      * Set String value for a particular key.
      */
-    public static void setProfile(Context context, Profile profile) {
+    public static void setProfile(Context context, @LoginType int loginType, Profile profile) {
         if (getDefaultSharedPref(context) != null && profile != null) {
             final SharedPreferences.Editor editor = getDefaultSharedPref(context).edit();
             if (editor != null) {
-                editor.putBoolean(LoginConstant.SharedPref.IS_LOGIN_COMPLETE, true);
-                editor.putString(LoginConstant.SharedPref.USER_ID_AUTO, getEmptyData(profile.getUserId()));
-                editor.putString(LoginConstant.SharedPref.USER_NAME, getEmptyData(profile.getName()));
-                editor.putString(LoginConstant.SharedPref.USER_PHOTO_URL, getEmptyData(profile.getImage()));
-                editor.putString(LoginConstant.SharedPref.USER_PHONE, getEmptyData(profile.getMobile()));
-                editor.putString(LoginConstant.SharedPref.USER_EMAIL, getEmptyData(profile.getEmail()));
-                editor.putString(LoginConstant.SharedPref.LOGIN_JSON, getEmptyData(profile.getJsonData()));
+                editor.putBoolean(LoginConstant.SharedPref.IS_LOGIN_COMPLETE + loginType, true);
+                editor.putString(LoginConstant.SharedPref.USER_ID_AUTO + loginType, getEmptyData(profile.getUserId()));
+                editor.putString(LoginConstant.SharedPref.USER_NAME + loginType, getEmptyData(profile.getName()));
+                editor.putString(LoginConstant.SharedPref.USER_PHOTO_URL + loginType, getEmptyData(profile.getImage()));
+                editor.putString(LoginConstant.SharedPref.USER_PHONE + loginType, getEmptyData(profile.getMobile()));
+                editor.putString(LoginConstant.SharedPref.USER_EMAIL + loginType, getEmptyData(profile.getEmail()));
+                editor.putString(LoginConstant.SharedPref.LOGIN_JSON + loginType, getEmptyData(profile.getJsonData()));
                 editor.commit();
             }
         }
     }
 
-    public static String getUserName(Context context) {
-        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_NAME);
+    public static Profile getUserProfile(Context context, @LoginType int loginType) {
+        Profile profile = new Profile();
+        if (getDefaultSharedPref(context) != null) {
+            final SharedPreferences editor = getDefaultSharedPref(context);
+            if (editor != null) {
+                profile.setUserId(editor.getString(LoginConstant.SharedPref.USER_ID_AUTO + loginType, ""));
+                profile.setName(editor.getString(LoginConstant.SharedPref.USER_NAME + loginType, ""));
+                profile.setMobile(editor.getString(LoginConstant.SharedPref.USER_PHONE + loginType, ""));
+                profile.setEmail(editor.getString(LoginConstant.SharedPref.USER_EMAIL + loginType, ""));
+                profile.setImage(editor.getString(LoginConstant.SharedPref.USER_PHOTO_URL + loginType, ""));
+                profile.setJsonData(editor.getString(LoginConstant.SharedPref.LOGIN_JSON + loginType, ""));
+            }
+        }
+        return profile;
     }
 
-    public static String getUserImage(Context context) {
-        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_PHOTO_URL);
+    public static String getUserName(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_NAME + loginType);
     }
 
-    public static String getUserId(Context context) {
-        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_ID_AUTO);
+    public static String getUserImage(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_PHOTO_URL + loginType);
     }
 
-    public static String getUserMobile(Context context) {
-        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_PHONE);
+    public static String getUserId(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_ID_AUTO + loginType);
     }
 
-    public static String getEmailId(Context context) {
-        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_EMAIL);
+    public static String getUserMobile(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_PHONE + loginType);
     }
 
-    public static String getProfileJson(Context context) {
-        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.LOGIN_JSON);
+    public static String getEmailId(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.USER_EMAIL + loginType);
     }
 
-    public static <T> T getProfileModel(Context context, Class<T> classOfT) {
-        return new Gson().fromJson(getProfileJson(context), classOfT);
+    public static String getProfileJson(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.LOGIN_JSON + loginType);
     }
 
-    public static Profile getUserProfile(Context context) {
-        return LoginUtil.getUserProfileData(context);
+    public static <T> T getProfileModel(Context context, @LoginType int loginType, Class<T> classOfT) {
+        return new Gson().fromJson(getProfileJson(context, loginType), classOfT);
     }
 
-    public static boolean isRegComplete(Context context) {
-        return LoginPrefUtil.getBoolean(context, LoginConstant.SharedPref.IS_REGISTRATION_COMPLETE);
+    public static boolean isRegComplete(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getBoolean(context, LoginConstant.SharedPref.IS_REGISTRATION_COMPLETE + loginType);
     }
 
-    public static boolean isLoginComplete(Context context) {
-        return LoginPrefUtil.getBoolean(context, LoginConstant.SharedPref.IS_LOGIN_COMPLETE);
+    public static boolean isLoginComplete(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getBoolean(context, LoginConstant.SharedPref.IS_LOGIN_COMPLETE + loginType);
     }
 
-    public static boolean isAuthenticationComplete(Context context) {
-        return LoginPrefUtil.getBoolean(context, LoginConstant.SharedPref.AUTHENTICATION_COMPLETE);
+    public static boolean isAuthenticationComplete(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getBoolean(context, LoginConstant.SharedPref.AUTHENTICATION_COMPLETE + loginType);
     }
 
-    public static String getEmailOrMobile(Context context) {
-        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.EMAIL_OR_MOBILE);
+    public static String getEmailOrMobile(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getString(context, LoginConstant.SharedPref.EMAIL_OR_MOBILE + loginType);
     }
 
-    public static void setRegComplete(Context context, boolean flag) {
-        LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.IS_REGISTRATION_COMPLETE, flag);
+    public static void setRegComplete(Context context, @LoginType int loginType, boolean flag) {
+        LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.IS_REGISTRATION_COMPLETE + loginType, flag);
     }
 
-    public static void setLoginComplete(Context context, boolean flag) {
-        LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.IS_LOGIN_COMPLETE, flag);
+    public static void setLoginComplete(Context context, @LoginType int loginType, boolean flag) {
+        LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.IS_LOGIN_COMPLETE + loginType, flag);
     }
 
-    public static void setAuthenticationComplete(Context context, boolean flag) {
-        LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.AUTHENTICATION_COMPLETE, flag);
+    public static void setAuthenticationComplete(Context context, @LoginType int loginType, boolean flag) {
+        LoginPrefUtil.setBoolean(context, LoginConstant.SharedPref.AUTHENTICATION_COMPLETE + loginType, flag);
     }
 
-    public static void setEmailOrMobile(Context context, String emailOrMobile) {
-        LoginPrefUtil.setString(context, LoginConstant.SharedPref.EMAIL_OR_MOBILE, emailOrMobile);
+    public static void setEmailOrMobile(Context context, @LoginType int loginType, String emailOrMobile) {
+        LoginPrefUtil.setString(context, LoginConstant.SharedPref.EMAIL_OR_MOBILE + loginType, emailOrMobile);
     }
 
     private static String getEmptyData(String data) {

@@ -10,9 +10,8 @@ import android.os.Build;
 import android.provider.Settings;
 import androidx.fragment.app.Fragment;
 
-import android.transition.Fade;
-import android.transition.Slide;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -21,8 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
+import com.appsfeature.login.interfaces.LoginType;
 import com.appsfeature.login.model.Profile;
 
 import java.security.MessageDigest;
@@ -55,7 +54,7 @@ public class LoginUtil {
 
     public static void initToolBarForThemeActivity(final Activity act, View v, String title) {
         ImageView ivBack = (ImageView) v.findViewById(R.id.iv_action_back);
-        TextView tvTitle = (TextView) v.findViewById(R.id.tv_titile);
+        TextView tvTitle = (TextView) v.findViewById(R.id.tv_title);
         tvTitle.setText(title);
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,21 +65,14 @@ public class LoginUtil {
         });
     }
 
-    public static void saveUserProfileData(Context context, Profile loginUser) {
+    public static void saveUserProfileData(Context context, @LoginType int loginType, Profile loginUser) {
         if (loginUser != null) {
-            LoginPrefUtil.setProfile(context, loginUser);
+            LoginPrefUtil.setProfile(context, loginType, loginUser);
         }
     }
 
-    public static Profile getUserProfileData(Context context) {
-        Profile profile = new Profile();
-        profile.setUserId(LoginSDK.getInstance().getUserId(context));
-        profile.setName(LoginSDK.getInstance().getUserName(context));
-        profile.setMobile(LoginSDK.getInstance().getUserMobile(context));
-        profile.setEmail(LoginSDK.getInstance().getEmailId(context));
-        profile.setImage(LoginSDK.getInstance().getUserImage(context));
-        profile.setJsonData(LoginSDK.getInstance().getProfileJson(context));
-        return profile;
+    public static Profile getUserProfileData(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getUserProfile(context, loginType);
     }
 
     public static String getDeviceId(Context context) {
@@ -108,5 +100,29 @@ public class LoginUtil {
 
     public static void showToast(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * @apiNote throw new IllegalArgumentException();
+     */
+    public static void logIntegration(String message){
+        String tag = "login-sdk";
+        Log.e(tag, ".     |  |");
+        Log.e(tag, ".     |  |");
+        Log.e(tag, ".     |  |");
+        Log.e(tag, ".   \\ |  | /");
+        Log.e(tag, ".    \\    /");
+        Log.e(tag, ".     \\  /");
+        Log.e(tag, ".      \\/");
+        Log.e(tag, ".");
+        Log.e(tag, message);
+        Log.e(tag, ".");
+        Log.e(tag, ".      /\\");
+        Log.e(tag, ".     /  \\");
+        Log.e(tag, ".    /    \\");
+        Log.e(tag, ".   / |  | \\");
+        Log.e(tag, ".     |  |");
+        Log.e(tag, ".     |  |");
+        Log.e(tag, ".");
     }
 }

@@ -29,8 +29,6 @@ public class AppApplication extends Application {
                     .setFacebookLogin(false)
                     .setGoogleLogin(true)
                     .setEmailLogin(true)
-                    .setEnableForgetPass(false)
-                    .setEnableSignup(true)
                     .addLoginListener(new LoginCallback.Listener() {
                         @Override
                         public void onSuccess(Profile response) {

@@ -1,4 +1,4 @@
-package com.appsfeature.login;
+package com.appsfeature.login.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 

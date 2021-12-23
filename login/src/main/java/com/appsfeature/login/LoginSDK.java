@@ -3,7 +3,10 @@ package com.appsfeature.login;
 import android.content.Context;
 import android.content.Intent;
 
+import com.appsfeature.login.activity.LoginActivity;
+import com.appsfeature.login.activity.ProfileActivity;
 import com.appsfeature.login.interfaces.LoginCallback;
+import com.appsfeature.login.interfaces.LoginType;
 import com.appsfeature.login.model.ApiRequest;
 import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.network.ApiInterface;
@@ -26,20 +29,15 @@ public class LoginSDK {
     private boolean isGoogleLogin = true;
     private boolean isEmailLogin = true;
     private boolean enableLogin = true;
-    private boolean enableSignup = true;
-    private boolean enableForgetPass = true;
-    private boolean enableAuthentication = true;
-    private String titleLogin = "Login";
-    private String titleSignup = "Sign up";
     private ApiInterface apiInterface;
     private final Retrofit retrofit;
     private LoginCallback.TermUseListener termsOfUseListener;
     private final HashMap<Integer, LoginCallback.Listener> mLoginListener = new HashMap<>();
-    private HashMap<Integer, ApiRequest> apiRequests;
-    private FormBuilderModel signupFormDetail;
+    private HashMap<Integer, HashMap<Integer, ApiRequest>> apiRequests;
+    private HashMap<Integer, FormBuilderModel> signupFormDetail;
 
-    public static Profile getLoginCredentials(Context context) {
-        return LoginPrefUtil.getUserProfile(context);
+    public static Profile getLoginCredentials(Context context, @LoginType int loginType) {
+        return LoginPrefUtil.getUserProfile(context, loginType);
     }
 
     private LoginSDK(Context context, String baseUrl, boolean isDebug) {
@@ -93,53 +91,26 @@ public class LoginSDK {
         }
     }
 
-    public void openLoginPage(final Context context) {
-        if (!LoginPrefUtil.isLoginComplete(context)) {
-            context.startActivity(new Intent(context, LoginActivity.class));
+    public void openLoginPage(final Context context, @LoginType int loginType) {
+        if (!LoginPrefUtil.isLoginComplete(context, loginType)) {
+            context.startActivity(new Intent(context, LoginActivity.class)
+                    .putExtra(LoginConstant.LOGIN_TYPE, loginType));
         }else {
             LoginUtil.showToast(context, "User already logged in.");
         }
     }
 
-    public void openLoginPage(final Context context, final boolean isOpenProfile, final boolean isOpenEditProfile) {
-        if (isOpenProfile && LoginPrefUtil.isRegComplete(context)) {
+    public void openLoginPage(final Context context, @LoginType int loginType, final boolean isOpenProfile, final boolean isOpenEditProfile) {
+        if (isOpenProfile && LoginPrefUtil.isRegComplete(context, loginType)) {
             context.startActivity(new Intent(context, ProfileActivity.class)
                     .putExtra(LoginConstant.OPEN_EDIT_PROFILE, isOpenEditProfile));
-        } else if (!LoginPrefUtil.isLoginComplete(context)) {
-            context.startActivity(new Intent(context, LoginActivity.class));
+        } else if (!LoginPrefUtil.isLoginComplete(context, loginType)) {
+            context.startActivity(new Intent(context, LoginActivity.class)
+                    .putExtra(LoginConstant.LOGIN_TYPE, loginType));
         }else {
             LoginUtil.showToast(context, "Already logged in.");
         }
     }
-
-    public String getUserName(Context context) {
-        return LoginPrefUtil.getUserName(context);
-    }
-
-    public String getUserImage(Context context) {
-        return LoginPrefUtil.getUserImage(context);
-    }
-
-    public String getUserId(Context context) {
-        return LoginPrefUtil.getUserId(context);
-    }
-
-      public String getUserMobile(Context context) {
-        return LoginPrefUtil.getUserMobile(context);
-    }
-
-    public String getEmailId(Context context) {
-        return LoginPrefUtil.getEmailId(context);
-    }
-
-    public String getProfileJson(Context context) {
-        return LoginPrefUtil.getProfileJson(context);
-    }
-
-    public Profile getUserProfile(Context context) {
-        return LoginUtil.getUserProfileData(context);
-    }
-
 
     public boolean isFacebookLogin() {
         return isFacebookLogin;
@@ -200,24 +171,6 @@ public class LoginSDK {
         }
     }
 
-    public String getTitleLogin() {
-        return titleLogin;
-    }
-
-    public LoginSDK setTitleLogin(String titleLogin) {
-        this.titleLogin = titleLogin;
-        return this;
-    }
-
-    public String getTitleSignup() {
-        return titleSignup;
-    }
-
-    public LoginSDK setTitleSignup(String titleSignup) {
-        this.titleSignup = titleSignup;
-        return this;
-    }
-
     public boolean isEnableLogin() {
         return enableLogin;
     }
@@ -227,48 +180,36 @@ public class LoginSDK {
         return this;
     }
 
-    public boolean isEnableSignup() {
-        return enableSignup;
+    public boolean isEnableSignup(ApiRequest apiRequest) {
+        return apiRequest != null;
     }
 
-    public LoginSDK setEnableSignup(boolean enableSignup) {
-        this.enableSignup = enableSignup;
-        return this;
+
+    public boolean isEnableForgetPass(ApiRequest apiRequest) {
+        return apiRequest != null;
     }
 
-    public boolean isEnableForgetPass() {
-        return enableForgetPass;
+    public boolean isEnableAuthentication(ApiRequest apiRequest) {
+        return apiRequest != null;
     }
 
-    public LoginSDK setEnableForgetPass(boolean enableForgetPass) {
-        this.enableForgetPass = enableForgetPass;
-        return this;
-    }
 
-    public LoginSDK setApiRequests(HashMap<Integer, ApiRequest> apiRequests) {
+    public LoginSDK setApiRequests(HashMap<Integer, HashMap<Integer, ApiRequest>> apiRequests) {
         this.apiRequests = apiRequests;
         return this;
     }
 
-    public HashMap<Integer, ApiRequest> getApiRequests() {
+    public HashMap<Integer, HashMap<Integer, ApiRequest>> getApiRequests() {
         return apiRequests;
     }
 
-    public boolean isEnableAuthentication() {
-        return enableAuthentication;
-    }
 
-    public LoginSDK setEnableAuthentication(boolean enableAuthentication) {
-        this.enableAuthentication = enableAuthentication;
-        return this;
-    }
-
-    public LoginSDK setSignupForm(FormBuilderModel signupFormDetail) {
+    public LoginSDK setSignupForm(HashMap<Integer, FormBuilderModel> signupFormDetail) {
         this.signupFormDetail = signupFormDetail;
         return this;
     }
 
-    public FormBuilderModel getSignupFormDetail() {
+    public HashMap<Integer, FormBuilderModel> getSignupFormDetail() {
         return signupFormDetail;
     }
 }

@@ -1,6 +1,6 @@
-package com.appsfeature.login.network;
+package com.appsfeature.login.interfaces;
 
-public interface LoginType {
+public interface ApiType {
     int LOGIN = 0;
     int SIGNUP = 1;
     int GENERATE_OTP = 2;

@@ -1,4 +1,4 @@
-package com.appsfeature.login;
+package com.appsfeature.login.activity;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -10,9 +10,11 @@ class BaseActivity extends AppCompatActivity {
         addFragmentWithoutBackstack(fragment,android.R.id.content, tag);
     }
     protected void addFragmentWithoutBackstack(Fragment fragment, int container, String tag) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(container, fragment, tag);
-        transaction.commit();
+        if(fragment != null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(container, fragment, tag);
+            transaction.commit();
+        }
     }
 
 
@@ -21,10 +23,12 @@ class BaseActivity extends AppCompatActivity {
     }
 
     protected void addFragment(Fragment fragment, int container, String tag) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(container, fragment, tag);
-        transaction.addToBackStack(tag);
-        transaction.commit();
+        if(fragment != null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(container, fragment, tag);
+            transaction.addToBackStack(tag);
+            transaction.commit();
+        }
     }
 
 }
