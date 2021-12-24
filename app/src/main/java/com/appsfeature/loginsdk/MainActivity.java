@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onLoginAdmin(View view) {
         AppApplication.getInstance()
-                .openLoginPage(this, LoginType.ADMIN);
+                .openLoginPageAppActivity(this, LoginType.ADMIN);
     }
 
     public void onClearPreferences(View view) {

@@ -115,6 +115,10 @@ public class AppApplication extends Application {
     }
 
     public void openLoginPage(final Context context, @LoginType int loginType) {
+        getLoginSdk().openLoginPage(context, loginType);
+    }
+
+    public void openLoginPageAppActivity(final Context context, @LoginType int loginType) {
         if (!LoginPrefUtil.isLoginComplete(context, loginType)) {
             context.startActivity(new Intent(context, AppLoginActivity.class)
                     .putExtra(LoginConstant.LOGIN_TYPE, loginType));
