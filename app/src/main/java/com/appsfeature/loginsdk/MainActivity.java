@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onLoginAdmin(View view) {
-        AppApplication.getInstance().getLoginSdk()
+        AppApplication.getInstance()
                 .openLoginPage(this, LoginType.ADMIN);
     }
 

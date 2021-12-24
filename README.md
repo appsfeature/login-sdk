@@ -113,6 +113,15 @@ public class AppApplication extends Application {
         }
         return loginSdk;
     }
+
+    public void openLoginPage(final Context context, @LoginType int loginType) {
+        if (!LoginPrefUtil.isLoginComplete(context, loginType)) {
+            context.startActivity(new Intent(context, AppLoginActivity.class)
+                    .putExtra(LoginConstant.LOGIN_TYPE, loginType));
+        }else {
+            LoginUtil.showToast(context, "User already logged in.");
+        }
+    }
 }
 ```
 
