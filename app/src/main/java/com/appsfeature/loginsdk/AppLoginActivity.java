@@ -13,7 +13,6 @@ import com.appsfeature.login.fragment.ScreenAuthentication;
 import com.appsfeature.login.fragment.ScreenLogin;
 import com.appsfeature.login.fragment.ScreenSignUp;
 import com.formbuilder.FormBuilder;
-import com.formbuilder.fragment.FormBuilderFragment;
 import com.formbuilder.interfaces.FormResponse;
 import com.formbuilder.model.FormBuilderModel;
 import com.formbuilder.util.FBConstant;
@@ -66,7 +65,7 @@ public class AppLoginActivity extends BaseLoginActivity {
             return null;
         }
         FormBuilder.getInstance().setFormSubmitListener(formSubmitListener);
-        Fragment fragment = new FormBuilderFragment();
+        Fragment fragment = new AppFormBuilderFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(FBConstant.CATEGORY_PROPERTY, property);
         fragment.setArguments(bundle);
