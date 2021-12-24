@@ -1,14 +1,16 @@
 package com.appsfeature.login.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
@@ -30,17 +32,22 @@ public class ForgotPassword extends BaseFragment {
     private ProgressButton btnAction;
     private Activity activity;
 
-    public interface Listener {
-        void onAddSignupScreen();
-        void addPasswordChangeScreen();
-
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof ForgotPassword.Listener) {
+            mListener = (ForgotPassword.Listener) context;
+        }
     }
 
-    public static ForgotPassword newInstance(Bundle bundle, Listener mListener) {
+    public interface Listener {
+        void onForgetPassAddSignupScreen();
+        void onForgetAddPasswordChangeScreen();
+    }
+
+    public static ForgotPassword newInstance(Bundle bundle) {
         ForgotPassword fragment = new ForgotPassword();
-        fragment.mListener = mListener;
         fragment.setArguments(bundle);
-        LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
         return fragment;
     }
 
@@ -91,7 +98,7 @@ public class ForgotPassword extends BaseFragment {
             @Override
             public void onClick(View v) {
                 if(mListener!=null){
-                    mListener.onAddSignupScreen();
+                    mListener.onForgetPassAddSignupScreen();
                 }
             }
         });
@@ -125,7 +132,7 @@ public class ForgotPassword extends BaseFragment {
                             btnAction.revertSuccessProgress(new ProgressButton.Listener() {
                                 @Override
                                 public void onAnimationCompleted() {
-                                    mListener.addPasswordChangeScreen();
+                                    mListener.onForgetAddPasswordChangeScreen();
                                 }
                             });
                         }

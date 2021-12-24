@@ -1,8 +1,8 @@
 package com.appsfeature.login.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +10,13 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+
 import com.appsfeature.login.BuildConfig;
 import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
 import com.appsfeature.login.interfaces.ApiType;
 import com.appsfeature.login.interfaces.NetworkListener;
-import com.appsfeature.login.model.ApiRequest;
 import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.network.LoginNetwork;
 import com.appsfeature.login.util.FieldValidation;
@@ -32,19 +33,25 @@ public class ScreenLogin extends BaseFragment {
     private ProgressButton btnAction;
     private Activity activity;
 
-    public interface Listener {
-        void addSignupScreen();
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof Listener) {
+            mListener = (Listener) context;
+        }
+    }
 
-        void addForgotPasswordScreen();
+    public interface Listener {
+        void onLoginAddSignupScreen();
+
+        void onLoginAddForgotPasswordScreen();
 
         void onLoginSuccess();
     }
 
-    public static ScreenLogin newInstance(Bundle bundle, Listener mListener) {
+    public static ScreenLogin newInstance(Bundle bundle) {
         ScreenLogin fragment = new ScreenLogin();
         fragment.setArguments(bundle);
-        fragment.mListener = mListener;
-        LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
         return fragment;
     }
 
@@ -105,14 +112,14 @@ public class ScreenLogin extends BaseFragment {
         llSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.addSignupScreen();
+                mListener.onLoginAddSignupScreen();
             }
         });
 
         llForgot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.addForgotPasswordScreen();
+                mListener.onLoginAddForgotPasswordScreen();
             }
         });
 

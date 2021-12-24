@@ -1,6 +1,7 @@
 package com.appsfeature.login.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
@@ -33,17 +36,23 @@ public class ScreenSignUp extends BaseFragment {
     private ProgressButton btnAction;
     private Activity activity;
 
-    public interface Listener {
-        void addLoginCompanyOption();
-
-        void onLoginSuccess();
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof ScreenSignUp.Listener) {
+            mListener = (ScreenSignUp.Listener) context;
+        }
     }
 
-    public static ScreenSignUp newInstance(Bundle bundle, Listener mListener) {
+    public interface Listener {
+        void onSignupAddLoginScreen();
+
+        void onSignupSuccess();
+    }
+
+    public static ScreenSignUp newInstance(Bundle bundle) {
         ScreenSignUp fragment = new ScreenSignUp();
         fragment.setArguments(bundle);
-        fragment.mListener = mListener;
-        LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
         return fragment;
     }
 
@@ -107,7 +116,7 @@ public class ScreenSignUp extends BaseFragment {
         llLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.addLoginCompanyOption();
+                mListener.onSignupAddLoginScreen();
             }
         });
 
@@ -132,7 +141,7 @@ public class ScreenSignUp extends BaseFragment {
                         btnAction.revertSuccessProgress(new ProgressButton.Listener() {
                             @Override
                             public void onAnimationCompleted() {
-                                mListener.onLoginSuccess();
+                                mListener.onSignupSuccess();
                             }
                         });
                     }

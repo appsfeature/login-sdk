@@ -18,7 +18,7 @@ allprojects {
         retrofit_version = '2.9.0'
         retrofit_okhttp_version = '4.8.1'
 
-        form_builder = '1.4'
+        form_builder = '1.5'
     }
 }
 ```
@@ -26,7 +26,7 @@ allprojects {
 [![](https://jitpack.io/v/appsfeature/login-sdk.svg)](https://jitpack.io/#appsfeature/login-sdk)
 ```gradle
 dependencies {
-    implementation 'com.github.appsfeature:login-sdk:1.1'
+    implementation 'com.github.appsfeature:login-sdk:1.2'
 
     //Add this dependency if you need to make dynamic signup form.
     implementation "com.github.appsfeature:form-builder:$rootProject.ext.form_builder"
@@ -284,6 +284,61 @@ public class LoginDataMap {
         Map<String, String> params = new HashMap<>();
         params.put("extra_params", "extraParams");
         return params;
+    }
+}
+```
+
+#### Custom App Login Activity class: for custom designed fragments and more
+```java
+public class AppLoginActivity extends BaseLoginActivity {
+
+    @Override
+    public int getLayoutContentView() {
+        return R.layout.login_activity;
+    }
+
+    @Override
+    public void onInitViews() {
+
+    }
+
+    @Override
+    public Fragment getLoginFragment() {
+        return ScreenLogin.newInstance(bundle);
+    }
+
+    @Override
+    public Fragment getSignupFragment() {
+        return ScreenSignUp.newInstance(bundle);
+    }
+
+    @Override
+    public Fragment getScreenAuthFragment(String emailOrMobile) {
+        return ScreenAuthentication.newInstance(bundle, emailOrMobile);
+    }
+
+    @Override
+    public Fragment getForgotPasswordFragment() {
+        return ForgotPassword.newInstance(bundle);
+    }
+
+    @Override
+    public Fragment getChangePasswordFragment(String userId) {
+        return ChangePassword.newInstance(bundle, userId);
+    }
+
+    @Nullable
+    @Override
+    public Fragment getFormBuilderFragment(FormBuilderModel property, FormResponse.FormSubmitListener formSubmitListener) {
+        if(property == null){
+            return null;
+        }
+        FormBuilder.getInstance().setFormSubmitListener(formSubmitListener);
+        Fragment fragment = new FormBuilderFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(FBConstant.CATEGORY_PROPERTY, property);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 }
 ```

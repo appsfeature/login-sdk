@@ -1,6 +1,7 @@
 package com.appsfeature.login.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -9,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.appsfeature.login.R;
 import com.appsfeature.login.interfaces.NetworkListener;
@@ -31,16 +34,22 @@ public class ScreenAuthentication extends BaseFragment {
     private TextView tagMessage, tagResend;
     private View llResend;
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof ScreenAuthentication.Listener) {
+            mListener = (ScreenAuthentication.Listener) context;
+        }
+    }
+
     public interface Listener {
         void onAuthenticationCompleted();
     }
 
-    public static ScreenAuthentication newInstance(Bundle bundle, String emailOrMobile, Listener mListener) {
+    public static ScreenAuthentication newInstance(Bundle bundle, String emailOrMobile) {
         ScreenAuthentication fragment = new ScreenAuthentication();
         fragment.setArguments(bundle);
         fragment.emailOrMobile = emailOrMobile;
-        fragment.mListener = mListener;
-        LoginUtil.setSlideAnimation(fragment, Gravity.TOP);
         return fragment;
     }
 
