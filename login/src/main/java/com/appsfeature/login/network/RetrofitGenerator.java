@@ -1,6 +1,8 @@
 package com.appsfeature.login.network;
 
 import com.appsfeature.login.BuildConfig;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
@@ -23,9 +25,13 @@ public class RetrofitGenerator {
     }
 
     public static Retrofit getClient(String host, String securityCode, boolean isDebug) {
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(host)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(getHttpClient(securityCode, isDebug).build())
                 .build();
         return retrofit;
