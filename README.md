@@ -26,7 +26,7 @@ allprojects {
 [![](https://jitpack.io/v/appsfeature/login-sdk.svg)](https://jitpack.io/#appsfeature/login-sdk)
 ```gradle
 dependencies {
-    implementation 'com.github.appsfeature:login-sdk:1.2'
+    implementation 'com.github.appsfeature:login-sdk:1.3'
 
     //Add this dependency if you need to make dynamic signup form.
     implementation "com.github.appsfeature:form-builder:$rootProject.ext.form_builder"

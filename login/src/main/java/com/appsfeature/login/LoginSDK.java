@@ -14,6 +14,7 @@ import com.appsfeature.login.network.RetrofitGenerator;
 import com.appsfeature.login.util.LoginConstant;
 import com.appsfeature.login.util.LoginPrefUtil;
 import com.appsfeature.login.util.LoginUtil;
+import com.formbuilder.FormBuilder;
 import com.formbuilder.model.FormBuilderModel;
 import com.google.gson.Gson;
 
@@ -25,6 +26,7 @@ import retrofit2.Retrofit;
 
 public class LoginSDK {
     private static LoginSDK instance;
+    private final boolean isDebugModeEnabled;
     private boolean isFacebookLogin = true;
     private boolean isGoogleLogin = true;
     private boolean isEmailLogin = true;
@@ -41,8 +43,10 @@ public class LoginSDK {
     }
 
     private LoginSDK(Context context, String baseUrl, boolean isDebug) {
+        this.isDebugModeEnabled = isDebug;
         retrofit = RetrofitGenerator.getClient(baseUrl, LoginUtil.getSecurityCode(context), isDebug);
         setApiInterface(retrofit);
+        FormBuilder.getInstance().setDebugModeEnabled(isDebug);
     }
 
     public static LoginSDK getInstance() {
@@ -56,8 +60,8 @@ public class LoginSDK {
         return instance;
     }
 
-    public static boolean isDebugMode() {
-        return BuildConfig.DEBUG;
+    public boolean isDebugMode() {
+        return isDebugModeEnabled;
     }
 
     public LoginSDK setFacebookLogin(boolean facebookLogin) {

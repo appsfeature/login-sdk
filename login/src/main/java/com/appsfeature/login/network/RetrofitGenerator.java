@@ -1,6 +1,7 @@
 package com.appsfeature.login.network;
 
 import com.appsfeature.login.BuildConfig;
+import com.appsfeature.login.LoginSDK;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitGenerator {
 
     public static Retrofit getClient(String host, String securityCode) {
-        return getClient(host, securityCode, BuildConfig.DEBUG);
+        return getClient(host, securityCode, LoginSDK.getInstance().isDebugMode());
     }
 
     public static Retrofit getClient(String host, String securityCode, boolean isDebug) {
