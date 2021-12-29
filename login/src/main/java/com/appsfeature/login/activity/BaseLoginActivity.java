@@ -18,11 +18,14 @@ import com.appsfeature.login.interfaces.ApiType;
 import com.appsfeature.login.interfaces.LoginType;
 import com.appsfeature.login.model.ApiRequest;
 import com.appsfeature.login.model.Profile;
+import com.appsfeature.login.network.LoginNetwork;
 import com.appsfeature.login.util.LoginConstant;
 import com.appsfeature.login.util.LoginPrefUtil;
 import com.appsfeature.login.util.LoginUtil;
 import com.formbuilder.interfaces.FormResponse;
 import com.formbuilder.model.FormBuilderModel;
+
+import org.json.JSONException;
 
 import java.util.HashMap;
 
@@ -108,8 +111,13 @@ public abstract class BaseLoginActivity extends BaseActivity implements ScreenLo
 
     @Override
     public void onFormSubmitted(String data) {
-        Profile profile = LoginSDK.getGson().fromJson(data, Profile.class);
-        LoginPrefUtil.setEmailOrMobile(BaseLoginActivity.this, loginType, profile.getEmailOrMobile());
+        try {
+            Profile profile = LoginNetwork.getProfile(data);
+            LoginPrefUtil.setProfile(this, loginType, profile);
+            LoginPrefUtil.setEmailOrMobile(BaseLoginActivity.this, loginType, profile.getEmailOrMobile());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         if (LoginSDK.getInstance().isEnableAuthentication(apiRequestMap.get(ApiType.GENERATE_OTP))) {
             addAuthenticationScreen(LoginPrefUtil.getEmailOrMobile(BaseLoginActivity.this, loginType));
         } else {

@@ -7,6 +7,7 @@ import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.util.LoginConstant;
 import com.appsfeature.login.util.LoginPrefUtil;
 import com.appsfeature.login.util.LoginUtil;
+import com.google.gson.Gson;
 
 public class LoginDetail {
 
@@ -72,5 +73,9 @@ public class LoginDetail {
     }
     public static Profile getUserProfile(Context context, @LoginType int loginType) {
         return LoginUtil.getUserProfileData(context, loginType);
+    }
+
+    public static <T> T getProfileModel(Context context, @LoginType int loginType, Class<T> classOfT) {
+        return new Gson().fromJson(getProfileJson(context, loginType), classOfT);
     }
 }

@@ -68,19 +68,7 @@ public class LoginNetwork {
                 public void onComplete(boolean status, BaseModel data) {
                     try {
                         if(status && !TextUtils.isEmpty(data.getData())) {
-                            Profile profile = null;
-                            Object json = new JSONTokener(data.getData()).nextValue();
-                            if (json instanceof JSONObject) {
-                                profile = LoginSDK.getGson().fromJson(data.getData(), Profile.class);
-                                profile.setJsonData(data.getData());
-                            }else if (json instanceof JSONArray) {
-                                List<Profile> profileList = LoginSDK.getGson().fromJson(data.getData(),new TypeToken<List<Profile>>() {
-                                }.getType());
-                                if(profileList != null && profileList.size() > 0){
-                                    profile = profileList.get(0);
-                                    profile.setJsonData(data.getData());
-                                }
-                            }
+                            Profile profile = getProfile(data.getData());
                             if (profile != null) {
                                 LoginPrefUtil.setProfile(context, loginType, profile);
                                 callback.onSuccess(profile);
@@ -102,6 +90,20 @@ public class LoginNetwork {
             });
         }
 
+    }
+
+    public static Profile getProfile(String jsonData) throws JSONException {
+        Object json = new JSONTokener(jsonData).nextValue();
+        String profileObject = "";
+        if (json instanceof JSONObject) {
+            profileObject = json.toString();
+        }else if (json instanceof JSONArray) {
+            JSONArray jsonArray = new JSONArray(jsonData);
+            profileObject = jsonArray.get(0).toString();
+        }
+        Profile profile = LoginSDK.getGson().fromJson(profileObject, Profile.class);
+        profile.setJsonData(profileObject);
+        return profile;
     }
 
     public void signUp(Context context, String name, String emailOrMobile, String username, String password, final NetworkListener<Profile> callback) {
