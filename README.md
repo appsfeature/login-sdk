@@ -18,7 +18,7 @@ allprojects {
         retrofit_version = '2.9.0'
         retrofit_okhttp_version = '4.8.1'
 
-        form_builder = '1.6'
+        form_builder = '1.7'
     }
 }
 ```
@@ -26,7 +26,7 @@ allprojects {
 [![](https://jitpack.io/v/appsfeature/login-sdk.svg)](https://jitpack.io/#appsfeature/login-sdk)
 ```gradle
 dependencies {
-    implementation 'com.github.appsfeature:login-sdk:1.3'
+    implementation 'com.github.appsfeature:login-sdk:1.5'
 
     //Add this dependency if you need to make dynamic signup form.
     implementation "com.github.appsfeature:form-builder:$rootProject.ext.form_builder"
