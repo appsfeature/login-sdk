@@ -71,9 +71,34 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack("tag");
         transaction.commit();
     }
+
+    public String getUsername(Context context) {
+        AppProfileModel profile = null;
+        if (LoginDetail.isLoginComplete(context, LoginType.DEFAULT_USER)) {
+            profile = LoginDetail.getProfileModel(context, LoginType.DEFAULT_USER, AppProfileModel.class);
+        } else if (LoginDetail.isLoginComplete(context, LoginType.ADMIN)) {
+            profile = LoginDetail.getProfileModel(context, LoginType.ADMIN, AppProfileModel.class);
+        }
+        return (profile != null && profile.getUsername() != null) ? profile.getUsername() : "";
+    }
 }
 ```
+```java
+public class AppProfileModel {
 
+    @Expose
+    @SerializedName(value="username")
+    private String username;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+}
+```
 #### In your Application class:
 ```java
 public class AppApplication extends Application {
@@ -89,6 +114,7 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        loginSdk = getLoginSdk();
     }
 
     public LoginSDK getLoginSdk() {
@@ -120,8 +146,10 @@ public class AppApplication extends Application {
 
     public void openLoginPageAppActivity(final Context context, @LoginType int loginType) {
         if (!LoginPrefUtil.isLoginComplete(context, loginType)) {
-            context.startActivity(new Intent(context, AppLoginActivity.class)
-                    .putExtra(LoginConstant.LOGIN_TYPE, loginType));
+            if(getLoginSdk() != null) {
+                context.startActivity(new Intent(context, AppLoginActivity.class)
+                        .putExtra(LoginConstant.LOGIN_TYPE, loginType));
+            }
         }else {
             LoginUtil.showToast(context, "User already logged in.");
         }
@@ -148,7 +176,9 @@ public class LoginDataMap {
         map = new HashMap<>();
         map.put(LoginParams.UserName, "email");
         map.put(LoginParams.Password, "password");
-        hashMap.put(ApiType.LOGIN, new ApiRequest( "Login", "login_ap", ApiRequestType.POST_FORM, map));
+        hashMap.put(ApiType.LOGIN, new ApiRequest( "Login", "login_ap", ApiRequestType.POST_FORM, map)
+                .setUsername("Test user")
+                .setPassword("user@123"));
 
         map = new HashMap<>();
         map.put(LoginParams.Name, "name");

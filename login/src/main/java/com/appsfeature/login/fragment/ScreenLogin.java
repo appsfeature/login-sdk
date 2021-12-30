@@ -3,6 +3,7 @@ package com.appsfeature.login.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.appsfeature.login.LoginSDK;
 import com.appsfeature.login.R;
 import com.appsfeature.login.interfaces.ApiType;
 import com.appsfeature.login.interfaces.NetworkListener;
+import com.appsfeature.login.model.ApiRequest;
 import com.appsfeature.login.model.Profile;
 import com.appsfeature.login.network.LoginNetwork;
 import com.appsfeature.login.util.FieldValidation;
@@ -70,9 +72,14 @@ public class ScreenLogin extends BaseFragment {
         etUsername = v.findViewById(R.id.et_employee_username);
         etPassword = v.findViewById(R.id.et_employee_password);
 
-        if(BuildConfig.DEBUG){
-            etUsername.setText("Aiou1002");
-            etPassword.setText("4545");
+        ApiRequest loginMap = apiRequestMap.get(ApiType.LOGIN);
+        if(LoginSDK.getInstance().isDebugMode() && loginMap != null){
+            if (!TextUtils.isEmpty(loginMap.getUsername())) {
+                etUsername.setText(loginMap.getUsername());
+            }
+            if (!TextUtils.isEmpty(loginMap.getPassword())) {
+                etPassword.setText(loginMap.getPassword());
+            }
         }
 
         LinearLayout llSignup = v.findViewById(R.id.ll_signup);

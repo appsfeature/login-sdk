@@ -25,6 +25,7 @@ public class AppApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        loginSdk = getLoginSdk();
     }
 
     public LoginSDK getLoginSdk() {
@@ -56,8 +57,10 @@ public class AppApplication extends Application {
 
     public void openLoginPageAppActivity(final Context context, @LoginType int loginType) {
         if (!LoginPrefUtil.isLoginComplete(context, loginType)) {
-            context.startActivity(new Intent(context, AppLoginActivity.class)
-                    .putExtra(LoginConstant.LOGIN_TYPE, loginType));
+            if(getLoginSdk() != null) {
+                context.startActivity(new Intent(context, AppLoginActivity.class)
+                        .putExtra(LoginConstant.LOGIN_TYPE, loginType));
+            }
         }else {
             LoginUtil.showToast(context, "User already logged in.");
         }

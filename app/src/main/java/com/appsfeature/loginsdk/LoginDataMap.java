@@ -35,7 +35,9 @@ public class LoginDataMap {
         map = new HashMap<>();
         map.put(LoginParams.UserName, "email");
         map.put(LoginParams.Password, "password");
-        hashMap.put(ApiType.LOGIN, new ApiRequest( "Login", "login_ap", ApiRequestType.POST_FORM, map));
+        hashMap.put(ApiType.LOGIN, new ApiRequest( "Login", "login_ap", ApiRequestType.POST_FORM, map)
+                .setUsername("Test user")
+                .setPassword("user@123"));
 
         map = new HashMap<>();
         map.put(LoginParams.Name, "name");

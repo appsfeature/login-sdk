@@ -11,6 +11,9 @@ public class ApiRequest {
 
     private String title;
     private String endPoint;
+    //Used for testing environment
+    private String username;
+    private String password;
 
     @ApiRequestType
     private int reqType;
@@ -33,16 +36,18 @@ public class ApiRequest {
         return title;
     }
 
-    public void setTitle(String title) {
+    public ApiRequest setTitle(String title) {
         this.title = title;
+        return this;
     }
 
     public String getEndPoint() {
         return endPoint;
     }
 
-    public void setEndPoint(String endPoint) {
+    public ApiRequest setEndPoint(String endPoint) {
         this.endPoint = endPoint;
+        return this;
     }
 
     @ApiRequestType
@@ -50,15 +55,35 @@ public class ApiRequest {
         return reqType;
     }
 
-    public void setReqType(@ApiRequestType int reqType) {
+    public ApiRequest setReqType(@ApiRequestType int reqType) {
         this.reqType = reqType;
+        return this;
     }
 
     public Map<String, String> getParams() {
         return params;
     }
 
-    public void setParams(Map<String, String> params) {
+    public ApiRequest setParams(Map<String, String> params) {
         this.params = params;
+        return this;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public ApiRequest setUsername(String username) {
+        this.username = username;
+        return this;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public ApiRequest setPassword(String password) {
+        this.password = password;
+        return this;
     }
 }

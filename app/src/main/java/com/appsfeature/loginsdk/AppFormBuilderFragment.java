@@ -16,9 +16,8 @@ public class AppFormBuilderFragment extends BaseFormBuilderFragment {
 
     @Override
     public int getLayoutContentView() {
-        return R.layout.pre_registration_list;
+        return R.layout.app_registration_list;
     }
-
 
     @Override
     public void onInitViews(View view) {
