@@ -216,4 +216,8 @@ public class LoginSDK {
     public HashMap<Integer, FormBuilderModel> getSignupFormDetail() {
         return signupFormDetail;
     }
+
+    public void syncSignupForm(){
+        FormBuilder.getInstance().syncSignupForm();
+    }
 }
