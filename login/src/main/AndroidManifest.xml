@@ -5,6 +5,7 @@
 
     <application>
         <activity android:name=".activity.LoginActivity"
-            android:theme="@style/LoginTheme.NoActionBar"/>
+            android:theme="@style/LoginTheme.NoActionBar"
+            android:exported="true"/>
     </application>
 </manifest>

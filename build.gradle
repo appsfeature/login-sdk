@@ -1,31 +1,25 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    repositories {
-        google()
-        jcenter()
-        
-    }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.1'
+//        classpath 'com.google.gms:google-services:4.3.10'
+//        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven { url 'https://jitpack.io' }
-    }
-    ext {
-        appcompat = '1.3.0'
-        cardview = '1.0.0'
-        material = '1.3.0'
-        retrofit_version = '2.9.0'
-        retrofit_okhttp_version = '4.8.1'
+plugins {
+    id 'com.android.application' version '7.1.3' apply false
+    id 'com.android.library' version '7.1.3' apply false
+}
 
-        form_builder = '1.9'
-    }
+ext {
+    appcompat = '1.4.1'
+    cardview = '1.0.0'
+    material = '1.3.0'
+    retrofit_version = '2.9.0'
+    retrofit_okhttp_version = '4.9.3'
+
+    form_builder = '2.0'
 }
 
 task clean(type: Delete) {

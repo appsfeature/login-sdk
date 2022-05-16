@@ -1,11 +1,13 @@
-apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+}
 
 android {
-    compileSdkVersion 30
+    compileSdk 31
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 30
+        minSdk 19
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -31,7 +33,7 @@ dependencies {
     implementation "androidx.cardview:cardview:$rootProject.ext.cardview"
     implementation "com.google.android.material:material:$rootProject.ext.material"
 
-    implementation 'com.github.appsfeature:progress-button:1.0'
+    implementation 'com.github.appsfeature:progress-button:1.1'
 
     implementation "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit_version"

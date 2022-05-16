@@ -11,7 +11,8 @@
         android:name=".AppApplication"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,7 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".AppLoginActivity"
-            android:theme="@style/LoginTheme.NoActionBar"/>
+            android:theme="@style/LoginTheme.NoActionBar"
+            android:exported="false"/>
     </application>
 
 </manifest>
