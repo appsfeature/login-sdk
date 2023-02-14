@@ -103,9 +103,9 @@ public class ScreenLogin extends BaseFragment {
 
         btnAction = ProgressButton.newInstance(getContext(), v)
                 .setText(getString(R.string.login))
-                .setOnClickListener(new View.OnClickListener() {
+                .setOnClickListener(new ProgressButton.ClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClicked(View view) {
                         if (!FieldValidation.isEmpty(getContext(), etUsername)) {
                             return;
                         } else if (!FieldValidation.isEmpty(getContext(), etPassword)) {

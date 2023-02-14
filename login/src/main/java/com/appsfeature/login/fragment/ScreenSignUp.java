@@ -3,7 +3,6 @@ package com.appsfeature.login.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,9 +83,9 @@ public class ScreenSignUp extends BaseFragment {
 
         btnAction = ProgressButton.newInstance(getContext(), v)
                 .setText(getString(R.string.sign_up))
-                .setOnClickListener(new View.OnClickListener() {
+                .setOnClickListener(new ProgressButton.ClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClicked(View view) {
                         if (!FieldValidation.isEmpty(getContext(), etName)) {
                             return;
                         } else if (!FieldValidation.isEmpty(getContext(), etEmailOrMobile)) {

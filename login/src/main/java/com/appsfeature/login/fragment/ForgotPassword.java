@@ -78,9 +78,9 @@ public class ForgotPassword extends BaseFragment {
 
         btnAction = ProgressButton.newInstance(getContext(), v)
                 .setText("Generate OTP")
-                .setOnClickListener(new View.OnClickListener() {
+                .setOnClickListener(new ProgressButton.ClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClicked(View view) {
                         if(!isOtpSend) {
                             if (!FieldValidation.isEmpty(getContext(), etEmailOrMobile)) {
                                 return;

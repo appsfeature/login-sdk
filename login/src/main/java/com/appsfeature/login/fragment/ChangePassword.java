@@ -76,9 +76,9 @@ public class ChangePassword extends BaseFragment {
 
         btnAction = ProgressButton.newInstance(getContext(), v)
                 .setText("Send Request")
-                .setOnClickListener(new View.OnClickListener() {
+                .setOnClickListener(new ProgressButton.ClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClicked(View view) {
                         LoginUtil.hideKeybord(activity);
                         executeTask();
                     }

@@ -77,9 +77,9 @@ public class ScreenAuthentication extends BaseFragment {
 
         btnAction = ProgressButton.newInstance(getContext(), v)
                 .setText("Verify OTP")
-                .setOnClickListener(new View.OnClickListener() {
+                .setOnClickListener(new ProgressButton.ClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClicked(View view) {
                         if(!isOtpSend) {
                             if (TextUtils.isEmpty(emailOrMobile)) {
                                 return;
